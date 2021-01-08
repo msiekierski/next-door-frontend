@@ -19,10 +19,11 @@ const Announcement: FunctionComponent<Props> = ({
     console.log("reply shows");
     event.preventDefault();
   };
+  const variant = lookUpVariant(announcementType);
 
   return (
-    <Card>
-      <Card.Header className={`bg-${announcementType}`} />
+    <Card className={`mt-3`}>
+      <Card.Header className={`bg-${variant}`} />
       <Card.Body>
         <Card.Title className={`d-flex justify-content-between`}>
           <span>{title}</span>
@@ -49,5 +50,11 @@ const Announcement: FunctionComponent<Props> = ({
     </Card>
   );
 };
+
+function lookUpVariant(variant: string) {
+  if (variant === "communal") {
+    return "primary";
+  } else if (variant === "administrative") return "warning";
+}
 
 export default Announcement;
