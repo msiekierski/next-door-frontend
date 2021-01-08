@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+# Hej NextDoorowcy!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Kilka uwag do projektu:
 
-## Available Scripts
+## Package manager - tylko Yarn
 
-In the project directory, you can run:
+W skrócie jak coś dodajecie do projektu zamiast 'npm install' róbcie 'yarn add'.
 
-### `yarn start`
+## Do tworzenia komponentów używamy React Bootstrap
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+generalnie robota kopiuj wklej:
+https://react-bootstrap.github.io/components/alerts
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Requesty API
 
-### `yarn test`
+Zacząłem używać u siebie biblioteki axios - jest bardzo przyjemna, ale róbcie jak chcecie nie zmuszam.
+Odsyłam do linka: https://www.digitalocean.com/community/tutorials/react-axios-react
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Typescript a Javascript
 
-### `yarn build`
+Nie musicie używać TS'a, jak chcecie to piszcie sobie w JS - wtedy robicice plik .jsx zamiast .tsx i wszystko będzie(raczej) działać.
+Uwaga w JS nie ma interfejsów, a przydają się jak robicie fetch z backendu.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## W projekcie jest użyty React Router - patrz App.tsx
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+https://reactrouter.com/web/guides/quick-start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Jak robimy component to dodajemy folder na niego żeby nie było syfu
 
-### `yarn eject`
+## !!!Jak robimy pusha to na before-master a nie na master
+## !!!Z gitem zawsze na spokojnie żeby projekt nie wyjebało w kosmos ale będe robił lokalnie backupy w razie "W".
+## !!!Pamiętajcie żeby zrobić pulla zanim zrobicie pusha.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Powodzenia!
