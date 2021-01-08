@@ -9,7 +9,7 @@ const Search: FunctionComponent<Props> = (props) => {
   const clicked = (event: MouseEvent) => {};
 
   return (
-    <InputGroup>
+    <InputGroup className={`mt-3`}>
       <FormControl placeholder="Search..." aria-label="Search..." />
       <InputGroup.Append>
         <Button onClick={clicked} variant="outline-secondary">
