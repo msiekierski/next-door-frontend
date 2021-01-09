@@ -1,28 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navigation from "./components/Navbar/Navbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Community from "./components/Community/Community";
-import Administration from "./components/Administration/Administration";
-import { Container } from "react-bootstrap";
+import { BrowserRouter as Router } from "react-router-dom";
+import LoginPage from "./components/Login/LoginPage";
+import { UserContext } from "./components/Login/UserContext";
+import ContentSwitch from "./components/ContentSwitch/ContentSwitch";
+import Navbar from "./components/Navbar/Navbar";
+import { IUser } from "./components/Login/IUser";
 
 function App() {
-  return (
-    <Router>
-      <Navigation />
-      <Container className="w-50 m-auto">
-        <Switch>
-          <Route path="/community">
-            <Community />
-          </Route>
-          <Route path="/administration">
-            <Administration />
-          </Route>
-        </Switch>
-      </Container>
-    </Router>
-  );
+  const [user, setUser] = useState<IUser | null>();
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    } else {
+      setUser(null);
+    }
+  }, [setUser]);
+
+  if (user) {
+    return (
+      <UserContext.Provider value={user}>
+        <Router>
+          <Navbar />
+          <ContentSwitch />
+        </Router>
+      </UserContext.Provider>
+    );
+  } else {
+    return <LoginPage setUser={setUser} />;
+  }
 }
 
 export default App;

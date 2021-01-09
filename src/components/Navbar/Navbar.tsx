@@ -1,24 +1,32 @@
-import React from "react";
-import Nav from "react-bootstrap/Nav";
+import React, { useContext } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
-import { LinkContainer } from "react-router-bootstrap";
+import { UserContext } from "../Login/UserContext";
+import LinksResident from "./LinksResident";
+import LinksAdvertiser from "./LinksAdvertiser";
+import LinksAdministrator from "./LinksAdministrator";
 
 const Navigation = () => {
+  const user = useContext(UserContext);
+
+  function Nav() {
+    if (user?.accountType == 1) {
+      return <LinksResident />;
+    }
+    if (user?.accountType == 2) {
+      return <LinksAdvertiser />;
+    }
+    if (user?.accountType == 3) {
+      return <LinksAdministrator />;
+    }
+  }
+
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand href="/">NextDoor</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="m-auto">
-          <LinkContainer to="/community">
-            <Nav.Link className="pr-5 pl-5">Community</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="/administration">
-            <Nav.Link className="pr-5 pl-5">Administration</Nav.Link>
-          </LinkContainer>
-        </Nav>
-
+        {Nav()}
         <Button>Settings</Button>
       </Navbar.Collapse>
     </Navbar>
