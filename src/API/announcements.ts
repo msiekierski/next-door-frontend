@@ -11,3 +11,16 @@ export async function getAllAnnouncements(user: IUser | null): Promise<Array<IAn
     return null;
   }
 }
+
+export async function putAnnouncement(announcementId: number, announcement_type: number, title: string, desc: string) {
+  try {
+    const response = await axios.put(`http://localhost:8080/nexDoor/put/announcement/${announcementId}`, {
+      announcement_type,
+      title,
+      desc,
+    });
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+}
