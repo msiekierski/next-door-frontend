@@ -10,16 +10,17 @@ export type Props = IAnnouncement;
 const user: IUser = JSON.parse(localStorage.getItem("user") || "{}");
 
 const Announcement: FunctionComponent<Props> = ({
+  idAccount,
   idAnnouncement,
   announcementType,
   title,
-  description,
+  desc,
   creationDate,
   author,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
-  const [descriptionEdit, setDescriptionEdit] = useState(description);
+  const [descriptionEdit, setDescriptionEdit] = useState(desc);
 
   const handleReplyClick = (event: MouseEvent) => {
     console.log("reply shows");
@@ -46,7 +47,7 @@ const Announcement: FunctionComponent<Props> = ({
   };
 
   const clearEdit = () => {
-    setDescriptionEdit(description);
+    setDescriptionEdit(desc);
     setTitleEdit(title);
   };
 
@@ -65,10 +66,8 @@ const Announcement: FunctionComponent<Props> = ({
           </span>
           <div className="flex-column">
             <Card.Subtitle className={`text-right mb-3`}>
-              {user.name + " " + user.surname === author && !isEditing && (
-                <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />
-              )}
-              {user.name + " " + user.surname === author && isEditing && (
+              {user.idAccount === idAccount && !isEditing && <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />}
+              {user.idAccount === idAccount && isEditing && (
                 <div className={`d-flex justify-content-end`}>
                   <Button size="sm" variant="danger" className="mr-2">
                     Delete
@@ -87,19 +86,15 @@ const Announcement: FunctionComponent<Props> = ({
         </Card.Title>
         <Card.Text>
           {!isEditing ? (
-            description
+            desc
           ) : (
-            <Form.Control
-              type="text"
-              value={descriptionEdit}
-              onChange={(e) => setDescriptionEdit(e.target.value)}
-            ></Form.Control>
+            <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
           )}
         </Card.Text>
         <Card.Subtitle className={`text-muted text-right`}>
-          {creationDate.toLocaleDateString()}
+          {new Date(creationDate).toLocaleDateString()}
           <br />
-          {creationDate.toLocaleTimeString(navigator.language, {
+          {new Date(creationDate).toLocaleTimeString(navigator.language, {
             hour: "2-digit",
             minute: "2-digit",
           })}

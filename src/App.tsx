@@ -9,7 +9,7 @@ import Navbar from "./components/Navbar/Navbar";
 import { IUser } from "./components/Login/IUser";
 
 function App() {
-  const [user, setUser] = useState<IUser | null>();
+  const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");

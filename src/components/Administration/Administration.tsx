@@ -8,8 +8,8 @@ const announcements: Array<IAnnouncement> = [
     announcementType: "administrative",
     author: "John Doe",
     comments: [],
-    creationDate: new Date(),
-    description: "My first post",
+    creationDate: "new Date()",
+    desc: "My first post",
     idAccount: 0,
     idAnnouncement: 0,
     title: "My Ann",
@@ -18,8 +18,8 @@ const announcements: Array<IAnnouncement> = [
     announcementType: "administrative",
     author: "John Hoe",
     comments: [],
-    creationDate: new Date(),
-    description: "My first post",
+    creationDate: "new Date()",
+    desc: "My first post",
     idAccount: 0,
     idAnnouncement: 0,
     title: "My Ann",
@@ -28,8 +28,8 @@ const announcements: Array<IAnnouncement> = [
     announcementType: "administrative",
     author: "John Poe",
     comments: [],
-    creationDate: new Date(),
-    description: "My first post",
+    creationDate: "new Date()",
+    desc: "My first post",
     idAccount: 0,
     idAnnouncement: 0,
     title: "My Ann",
@@ -52,7 +52,7 @@ function getAnnouncementComponent(announcement: IAnnouncement) {
       idAccount={announcement.idAccount}
       announcementType={announcement.announcementType}
       title={announcement.title}
-      description={announcement.description}
+      desc={announcement.desc}
       creationDate={announcement.creationDate}
       author={announcement.author}
       comments={announcement.comments}

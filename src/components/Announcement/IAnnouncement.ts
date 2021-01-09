@@ -5,8 +5,8 @@ interface IAnnouncement {
   idAccount: number;
   announcementType: string;
   title: string;
-  description: string;
-  creationDate: Date;
+  desc: string;
+  creationDate: string;
   author: string;
   comments: Array<IComment>;
 }
