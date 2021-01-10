@@ -1,9 +1,9 @@
 import React from "react";
-import IAnnouncement from "../Announcement/IAnnouncement";
-import Announcement from "../Announcement/Announcement";
+import IAnnouncementAdmin from "../Announcement/IAnnoucementAdmin";
+import AnnouncementAdmin from "../Announcement/AnnoucementAdmin";
 import Search from "../Search/Search";
 
-const announcements: Array<IAnnouncement> = [
+const announcements: Array<IAnnouncementAdmin> = [
   {
     announcementType: "administrative",
     author: "John Doe",
@@ -45,9 +45,9 @@ const Administration = () => {
   );
 };
 
-function getAnnouncementComponent(announcement: IAnnouncement) {
+function getAnnouncementComponent(announcement: IAnnouncementAdmin) {
   return (
-    <Announcement
+    <AnnouncementAdmin
       idAnnouncement={announcement.idAnnouncement}
       idAccount={announcement.idAccount}
       announcementType={announcement.announcementType}

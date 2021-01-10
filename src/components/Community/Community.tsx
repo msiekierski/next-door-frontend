@@ -17,29 +17,42 @@ const Community = () => {
     fetchAnnouncements();
   }, []);
 
+  const deleteAnnouncement = (id: number) => {
+    setAnnouncements(announcements.filter((ann) => ann.idAnnouncement !== id));
+  };
+
+  const updateAnnouncement = (id: number, newTitile: string, newDesc: string) => {
+    let newAnn = [...announcements];
+    const index: number = newAnn.findIndex((ann) => ann.idAnnouncement === id);
+    newAnn[index].title = newTitile;
+    newAnn[index].desc = newDesc;
+    setAnnouncements(newAnn);
+  };
+
+  const getAnnouncementComponent = (announcement: IAnnouncement) => {
+    return (
+      <Announcement
+        key={announcement.idAnnouncement}
+        idAnnouncement={announcement.idAnnouncement}
+        idAccount={announcement.idAccount}
+        announcementType={announcement.announcementType}
+        title={announcement.title}
+        desc={announcement.desc}
+        creationDate={announcement.creationDate}
+        author={announcement.author}
+        comments={announcement.comments}
+        removeAnnouncement={deleteAnnouncement}
+        updateAnnouncement={updateAnnouncement}
+      />
+    );
+  };
+
   return (
     <div>
       <Search />
-      {announcements.length ? announcements.map(getAnnouncementComponent) : "Loading..."}
+      {announcements && announcements.length ? announcements.map(getAnnouncementComponent) : "Loading..."}
     </div>
   );
 };
-
-function getAnnouncementComponent(announcement: IAnnouncement) {
-  console.log(announcement);
-  return (
-    <Announcement
-      key={announcement.idAnnouncement}
-      idAnnouncement={announcement.idAnnouncement}
-      idAccount={announcement.idAccount}
-      announcementType={announcement.announcementType}
-      title={announcement.title}
-      desc={announcement.desc}
-      creationDate={announcement.creationDate}
-      author={announcement.author}
-      comments={announcement.comments}
-    />
-  );
-}
 
 export default Community;

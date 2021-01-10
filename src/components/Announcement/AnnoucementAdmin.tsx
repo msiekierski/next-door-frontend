@@ -1,15 +1,15 @@
 import React, { FunctionComponent, MouseEvent, useState } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
-import IAnnouncement from "./IAnnouncement";
+import IAnnouncementAdmin from "./IAnnoucementAdmin";
 import { IUser } from "../Login/IUser";
-import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
+import { putAnnouncement } from "../../API/announcements";
 
-export type Props = IAnnouncement;
+export type Props = IAnnouncementAdmin;
 
 const user: IUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-const Announcement: FunctionComponent<Props> = ({
+const AnnouncementAdmin: FunctionComponent<Props> = ({
   idAccount,
   idAnnouncement,
   announcementType,
@@ -17,8 +17,6 @@ const Announcement: FunctionComponent<Props> = ({
   desc,
   creationDate,
   author,
-  removeAnnouncement,
-  updateAnnouncement,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -43,8 +41,7 @@ const Announcement: FunctionComponent<Props> = ({
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
     const annType: number = announcementType === "communal" ? 1 : 2;
-    await putAnnouncement(idAnnouncement, annType, titleEdit, descriptionEdit);
-    updateAnnouncement(idAnnouncement, titleEdit, descriptionEdit);
+    putAnnouncement(idAnnouncement, annType, titleEdit, descriptionEdit);
     clearEdit();
     setIsEditing(false);
   };
@@ -52,12 +49,6 @@ const Announcement: FunctionComponent<Props> = ({
   const clearEdit = () => {
     setDescriptionEdit(desc);
     setTitleEdit(title);
-  };
-
-  const handleDeleteEditClick = async (e: MouseEvent) => {
-    e.preventDefault();
-    await deleteAnnouncement(idAnnouncement);
-    removeAnnouncement(idAnnouncement);
   };
 
   const variant = lookUpVariant(announcementType);
@@ -78,7 +69,7 @@ const Announcement: FunctionComponent<Props> = ({
               {user.idAccount === idAccount && !isEditing && <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />}
               {user.idAccount === idAccount && isEditing && (
                 <div className={`d-flex justify-content-end`}>
-                  <Button size="sm" variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
+                  <Button size="sm" variant="danger" className="mr-2">
                     Delete
                   </Button>
                   <Button size="sm" variant="warning" className="mr-2" onClick={handleCancelEditClick}>
@@ -127,4 +118,4 @@ function lookUpVariant(variant: string) {
   } else if (variant === "administrative") return "warning";
 }
 
-export default Announcement;
+export default AnnouncementAdmin;
