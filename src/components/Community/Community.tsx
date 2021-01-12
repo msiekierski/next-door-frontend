@@ -33,10 +33,31 @@ const Community = () => {
     setAnnouncements(newAnn);
   };
 
-  const hideAnnouncementCreator = (e: MouseEvent) => {
-    e.preventDefault()
-    setIsCreatingAnnouncement(false)
-  }
+  const hideAnnouncementCreator = () => {
+    setIsCreatingAnnouncement(false);
+  };
+
+  const addNewAnnouncement = (
+    idAccount: number,
+    idAnnouncement: number,
+    title: string,
+    description: string,
+    creationDate: string
+  ) => {
+    const newAnnouncement: IAnnouncement = {
+      idAccount: idAccount,
+      idAnnouncement: idAnnouncement,
+      announcementType: "communal",
+      title: title,
+      desc: description,
+      creationDate: creationDate,
+      author: user?.name + " " + user?.surname,
+      comments: [],
+      removeAnnouncement: deleteAnnouncement,
+      updateAnnouncement: updateAnnouncement,
+    };
+    setAnnouncements([newAnnouncement, ...announcements]);
+  };
 
   const getAnnouncementComponent = (announcement: IAnnouncement) => {
     return (
@@ -67,7 +88,12 @@ const Community = () => {
         )}
         {!isCreatingAnnouncement && <Card.Link>Create Event</Card.Link>}
       </div>
-      {isCreatingAnnouncement && <AnnouncementCreator hideAnnouncementCreator={hideAnnouncementCreator} />}
+      {isCreatingAnnouncement && (
+        <AnnouncementCreator
+          hideAnnouncementCreator={hideAnnouncementCreator}
+          addNewAnnouncement={addNewAnnouncement}
+        />
+      )}
       {announcements && announcements.length ? announcements.map(getAnnouncementComponent) : "Loading..."}
     </div>
   );
