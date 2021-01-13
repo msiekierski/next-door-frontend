@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import { Route, Switch } from "react-router-dom";
 import Community from "../Community/Community";
 import Administration from "../Administration/Administration";
+import AdvertisementsPage from "../Advertisements/AdvertisementsPage/AdvertisementsPage";
 
 interface OwnProps {}
 
@@ -17,6 +18,9 @@ const ContentSwitch: FunctionComponent<Props> = (props) => {
         </Route>
         <Route path="/administration">
           <Administration />
+        </Route>
+        <Route path="/advertisements">
+          <AdvertisementsPage />
         </Route>
       </Switch>
     </Container>

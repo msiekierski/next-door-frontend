@@ -9,7 +9,7 @@ type Props = OwnProps;
 const LinksAdvertiser: FunctionComponent<Props> = (props) => {
   return (
     <Nav className="m-auto">
-      <LinkContainer to="/advertisement">
+      <LinkContainer to="/advertisements">
         <Nav.Link className="pr-5 pl-5">Advertisement</Nav.Link>
       </LinkContainer>
     </Nav>
