@@ -1,6 +1,8 @@
 import axios from "axios";
+import { useContext } from "react";
 import IAnnouncement from "../components/Announcement/IAnnouncement";
 import { IUser } from "../components/Login/IUser";
+import { UserContext } from "../components/Login/UserContext";
 
 export async function getAllAnnouncements(idAssoc?: number): Promise<Array<IAnnouncement>> {
   interface ResponseType {
@@ -37,4 +39,28 @@ export async function deleteAnnouncement(announcementId: number) {
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function createAnnouncement(
+  idAccount: number,
+  announcementType: number,
+  title: string,
+  description: string,
+  creationDate: string,
+  idAssoc: number
+):Promise<number> {
+  try {
+    const response = await axios.post(`http://localhost:8080/nexDoor/create/announcement`, {
+      idAccount,
+      announcementType,
+      title,
+      description,
+      creationDate,
+      idAssoc,
+    });
+    return response.data.substring("Announcement created with id ".length)
+  } catch (e) {
+    console.log(e);
+  }
+  return -1;
 }

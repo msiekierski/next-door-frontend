@@ -5,10 +5,14 @@ import IAnnouncement from "../Announcement/IAnnouncement";
 import { getAllAnnouncements } from "../../API/announcements";
 import { UserContext } from "../Login/UserContext";
 import { IUser } from "../Login/IUser";
+import { Card } from "react-bootstrap";
+import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 
 const Community = () => {
   const user = useContext<IUser | null>(UserContext);
   const [announcements, setAnnouncements] = useState<Array<IAnnouncement>>([]);
+  const [isCreatingAnnouncement, setIsCreatingAnnouncement] = useState(false);
+  const [isCreatingEvent, setIsCreatingEvent] = useState(false);
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -27,6 +31,32 @@ const Community = () => {
     newAnn[index].title = newTitile;
     newAnn[index].desc = newDesc;
     setAnnouncements(newAnn);
+  };
+
+  const hideAnnouncementCreator = () => {
+    setIsCreatingAnnouncement(false);
+  };
+
+  const addNewAnnouncement = (
+    idAccount: number,
+    idAnnouncement: number,
+    title: string,
+    description: string,
+    creationDate: string
+  ) => {
+    const newAnnouncement: IAnnouncement = {
+      idAccount: idAccount,
+      idAnnouncement: idAnnouncement,
+      announcementType: "communal",
+      title: title,
+      desc: description,
+      creationDate: creationDate,
+      author: user?.name + " " + user?.surname,
+      comments: [],
+      removeAnnouncement: deleteAnnouncement,
+      updateAnnouncement: updateAnnouncement,
+    };
+    setAnnouncements([newAnnouncement, ...announcements]);
   };
 
   const getAnnouncementComponent = (announcement: IAnnouncement) => {
@@ -50,6 +80,20 @@ const Community = () => {
   return (
     <div>
       <Search />
+      <div className="d-flex justify-content-between mt-3 ">
+        {!isCreatingEvent && (
+          <Card.Link href="#" onClick={() => setIsCreatingAnnouncement(!isCreatingAnnouncement)}>
+            {isCreatingAnnouncement ? "Hide Creator" : "Create Announcement"}
+          </Card.Link>
+        )}
+        {!isCreatingAnnouncement && <Card.Link>Create Event</Card.Link>}
+      </div>
+      {isCreatingAnnouncement && (
+        <AnnouncementCreator
+          hideAnnouncementCreator={hideAnnouncementCreator}
+          addNewAnnouncement={addNewAnnouncement}
+        />
+      )}
       {announcements && announcements.length ? announcements.map(getAnnouncementComponent) : "Loading..."}
     </div>
   );
