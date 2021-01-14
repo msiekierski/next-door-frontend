@@ -1,7 +1,7 @@
 import IComment from "./Comment/IComment";
 
 interface IAnnouncement {
-  idAnnouncement: number;
+  id: number;
   idAccount: number;
   announcementType: string;
   title: string;
@@ -11,6 +11,7 @@ interface IAnnouncement {
   comments: Array<IComment>;
   removeAnnouncement: Function;
   updateAnnouncement: Function;
+  type: "announcement";
 }
 
 export default IAnnouncement;
