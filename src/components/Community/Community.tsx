@@ -22,13 +22,11 @@ const Community = () => {
     const fetchFeed = async () => {
       const annPromise = await getAllAnnouncements(user?.idAssoc);
       const eventsPromise: Array<IEvent> = await getAllEvents(user?.idAccount!);
-      Promise.all([annPromise, eventsPromise]).then(
-        result => {
-          result[0].map((ann) => ann.type = IANNOUNCEMENT_TYPE);
-          result[1].map((event) => event.type = IEVENT_TYPE);
-          setFeed([...result[0], ...result[1]])
-        }
-      );
+      Promise.all([annPromise, eventsPromise]).then((result) => {
+        result[0].map((ann) => (ann.type = IANNOUNCEMENT_TYPE));
+        result[1].map((event) => (event.type = IEVENT_TYPE));
+        setFeed([...result[0], ...result[1]]);
+      });
     };
     fetchFeed();
   }, []);
@@ -72,7 +70,7 @@ const Community = () => {
     setFeed([newAnnouncement, ...feed]);
   };
 
-  const getAnnouncementComponent = (feedElement: IAnnouncement | IEvent) => {
+  const getFeedComponent = (feedElement: IAnnouncement | IEvent) => {
     if (feedElement.type === IANNOUNCEMENT_TYPE) {
       return (
         <Announcement
@@ -91,7 +89,7 @@ const Community = () => {
         />
       );
     } else if (feedElement.type === IEVENT_TYPE) {
-      console.log(feedElement.creationDate)
+      console.log(feedElement.creationDate);
       return (
         <Event
           key={feedElement.id}
@@ -123,7 +121,7 @@ const Community = () => {
           addNewAnnouncement={addNewAnnouncement}
         />
       )}
-      {feed && feed.length ? feed.map(getAnnouncementComponent) : "Loading..."}
+      {feed && feed.length ? feed.map(getFeedComponent) : "Loading..."}
     </div>
   );
 };
