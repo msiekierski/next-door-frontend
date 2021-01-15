@@ -5,14 +5,10 @@ import { IUser } from "../components/Login/IUser";
 import { UserContext } from "../components/Login/UserContext";
 
 export async function getAllAnnouncements(idAssoc?: number): Promise<Array<IAnnouncement>> {
-  interface ResponseType {
-    announcements: Array<IAnnouncement>;
-  }
-
   try {
-    const { data } = await axios.get<ResponseType>(`http://localhost:8080/nexDoor/get/announcement/${idAssoc}`, {});
+    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/announcement/${idAssoc}`, {});
     console.log(data);
-    return data.announcements;
+    return data;
   } catch (e) {
     console.log(e);
     return [];
@@ -48,7 +44,7 @@ export async function createAnnouncement(
   description: string,
   creationDate: string,
   idAssoc: number
-):Promise<number> {
+): Promise<number> {
   try {
     const response = await axios.post(`http://localhost:8080/nexDoor/create/announcement`, {
       idAccount,
@@ -58,7 +54,7 @@ export async function createAnnouncement(
       creationDate,
       idAssoc,
     });
-    return response.data.substring("Announcement created with id ".length)
+    return response.data.substring("Announcement created with id ".length);
   } catch (e) {
     console.log(e);
   }

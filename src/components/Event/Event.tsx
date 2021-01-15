@@ -1,37 +1,27 @@
 import React, { FunctionComponent, MouseEvent, useState } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
-import IAnnouncement from "./IAnnouncement";
 import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
+import IEvent from "./IEvent";
 
-export type Props = IAnnouncement;
+export type Props = IEvent;
 
 const user: IUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-const Announcement: FunctionComponent<Props> = ({
-  idAccount,
-  id: idAnnouncement,
-  announcementType,
-  title,
-  desc,
-  creationDate,
-  author,
-  removeAnnouncement,
-  updateAnnouncement,
-}) => {
+const Event: FunctionComponent<Props> = ({ idAccount, id, title, desc, creationDate, dateOfEvent }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(desc);
 
-  const handleReplyClick = (event: MouseEvent) => {
-    console.log("reply shows");
-    // event.preventDefault();
+  console.log(dateOfEvent);
+
+  const handleJoinClick = (e: MouseEvent) => {
+    e.preventDefault();
   };
 
-  const handleShowRepliesClick = (event: MouseEvent) => {
-    console.log("reply shows");
-    event.preventDefault();
+  const handleShowParticipiants = (e: MouseEvent) => {
+    e.preventDefault();
   };
 
   const handleCancelEditClick = (e: MouseEvent) => {
@@ -42,9 +32,7 @@ const Announcement: FunctionComponent<Props> = ({
 
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
-    const annType: number = announcementType === "communal" ? 1 : 2;
-    await putAnnouncement(idAnnouncement, annType, titleEdit, descriptionEdit);
-    updateAnnouncement(idAnnouncement, titleEdit, descriptionEdit);
+    //TODO
     clearEdit();
     setIsEditing(false);
   };
@@ -56,14 +44,12 @@ const Announcement: FunctionComponent<Props> = ({
 
   const handleDeleteEditClick = async (e: MouseEvent) => {
     e.preventDefault();
-    await deleteAnnouncement(idAnnouncement);
-    removeAnnouncement(idAnnouncement);
+    //TODO
   };
 
-  const variant = lookUpVariant(announcementType);
   return (
     <Card className={`mt-3`}>
-      <Card.Header className={`bg-${variant}`} />
+      <Card.Header className={`bg-info`} />
       <Card.Body>
         <Card.Title className={`d-flex justify-content-between`}>
           <span>
@@ -90,7 +76,7 @@ const Announcement: FunctionComponent<Props> = ({
                 </div>
               )}
             </Card.Subtitle>
-            <Card.Subtitle className={`text-muted text-right`}>{author}</Card.Subtitle>
+            <Card.Subtitle className={`text-muted text-right`}>{dateOfEvent}</Card.Subtitle>
           </div>
         </Card.Title>
         <Card.Text>
@@ -110,21 +96,14 @@ const Announcement: FunctionComponent<Props> = ({
         </Card.Subtitle>
       </Card.Body>
       <Card.Footer className={`d-flex justify-content-between`}>
-        <Card.Link href={``} onClick={handleReplyClick}>
-          Reply
+        <Card.Link href={``} onClick={handleJoinClick}>
+          Join
         </Card.Link>
-        <Card.Link href={``} onClick={handleShowRepliesClick}>
-          No replies yet
+        <Card.Link href={``} onClick={handleShowParticipiants}>
+          0 participiants
         </Card.Link>
       </Card.Footer>
     </Card>
   );
 };
-
-function lookUpVariant(variant: string) {
-  if (variant === "communal") {
-    return "primary";
-  } else if (variant === "administrative") return "warning";
-}
-
-export default Announcement;
+export default Event;
