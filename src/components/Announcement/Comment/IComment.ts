@@ -1,7 +1,7 @@
 interface IComment {
-  id: number;
-  author: string;
-  date: number;
+  idAccount?: number;
+  idAnnouncement: number;
+  creationDate: string;
   description: string;
 }
 

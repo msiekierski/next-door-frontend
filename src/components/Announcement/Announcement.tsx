@@ -1,37 +1,51 @@
-import React, { FunctionComponent, MouseEvent, useState } from "react";
+import React, { FunctionComponent, MouseEvent, useContext, useState } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import IAnnouncement from "./IAnnouncement";
 import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
+import CommentList from "./CommentList/CommentList";
+import Reply from "./Reply/Reply";
+import IComment from "./Comment/IComment";
+import { UserContext } from "../Login/UserContext";
 
-export type Props = IAnnouncement;
-
-const user: IUser = JSON.parse(localStorage.getItem("user") || "{}");
+export type Props = IAnnouncement & {
+  removeAnnouncement: Function;
+  updateAnnouncement: Function;
+};
 
 const Announcement: FunctionComponent<Props> = ({
   idAccount,
-  id: idAnnouncement,
+  idAnnouncement,
   announcementType,
   title,
-  desc,
+  description,
   creationDate,
   author,
+  replays,
   removeAnnouncement,
   updateAnnouncement,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
-  const [descriptionEdit, setDescriptionEdit] = useState(desc);
+  const [descriptionEdit, setDescriptionEdit] = useState(description);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState(replays);
+  const [reply, setReply] = useState(false);
+  const user = useContext(UserContext);
 
-  const handleReplyClick = (event: MouseEvent) => {
-    console.log("reply shows");
-    // event.preventDefault();
+  const commentAdd = (comment: IComment) => {
+    setComments([comment, ...comments]);
   };
 
-  const handleShowRepliesClick = (event: MouseEvent) => {
-    console.log("reply shows");
-    event.preventDefault();
+  const handleReplyClick = (e: MouseEvent) => {
+    e.preventDefault();
+    setReply(!reply);
+  };
+
+  const handleShowRepliesClick = (e: MouseEvent) => {
+    e.preventDefault();
+    setShowComments(!showComments);
   };
 
   const handleCancelEditClick = (e: MouseEvent) => {
@@ -42,25 +56,26 @@ const Announcement: FunctionComponent<Props> = ({
 
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
-    const annType: number = announcementType === "communal" ? 1 : 2;
-    await putAnnouncement(idAnnouncement, annType, titleEdit, descriptionEdit);
+    await putAnnouncement(idAnnouncement, announcementType, titleEdit, descriptionEdit);
     updateAnnouncement(idAnnouncement, titleEdit, descriptionEdit);
     clearEdit();
     setIsEditing(false);
   };
 
   const clearEdit = () => {
-    setDescriptionEdit(desc);
+    setDescriptionEdit(description);
     setTitleEdit(title);
   };
 
   const handleDeleteEditClick = async (e: MouseEvent) => {
     e.preventDefault();
     await deleteAnnouncement(idAnnouncement);
+    setIsEditing(false);
     removeAnnouncement(idAnnouncement);
   };
 
   const variant = lookUpVariant(announcementType);
+
   return (
     <Card className={`mt-3`}>
       <Card.Header className={`bg-${variant}`} />
@@ -75,16 +90,20 @@ const Announcement: FunctionComponent<Props> = ({
           </span>
           <div className="flex-column">
             <Card.Subtitle className={`text-right mb-3`}>
-              {user.idAccount === idAccount && !isEditing && <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />}
-              {user.idAccount === idAccount && isEditing && (
+              {user?.idAccount === idAccount && !isEditing && (
+                <span className={`btn`}>
+                  <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />{" "}
+                </span>
+              )}
+              {user?.idAccount === idAccount && isEditing && (
                 <div className={`d-flex justify-content-end`}>
-                  <Button size="sm" variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
+                  <Button variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
                     Delete
                   </Button>
-                  <Button size="sm" variant="warning" className="mr-2" onClick={handleCancelEditClick}>
+                  <Button variant="warning" className="mr-2" onClick={handleCancelEditClick}>
                     Cancel
                   </Button>
-                  <Button size="sm" variant="primary" onClick={handleSaveEditClick}>
+                  <Button variant="primary" onClick={handleSaveEditClick}>
                     Save
                   </Button>
                 </div>
@@ -95,36 +114,31 @@ const Announcement: FunctionComponent<Props> = ({
         </Card.Title>
         <Card.Text>
           {!isEditing ? (
-            desc
+            description
           ) : (
             <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
           )}
         </Card.Text>
-        <Card.Subtitle className={`text-muted text-right`}>
-          {new Date(creationDate).toLocaleDateString()}
-          <br />
-          {new Date(creationDate).toLocaleTimeString(navigator.language, {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Card.Subtitle>
+        <Card.Subtitle className={`text-muted text-right`}>{new Date(creationDate).toLocaleDateString()}</Card.Subtitle>
       </Card.Body>
       <Card.Footer className={`d-flex justify-content-between`}>
         <Card.Link href={``} onClick={handleReplyClick}>
           Reply
         </Card.Link>
         <Card.Link href={``} onClick={handleShowRepliesClick}>
-          No replies yet
+          {comments.length ? "Show replies" : null}
         </Card.Link>
       </Card.Footer>
+      {reply ? <Reply commentAdd={commentAdd} idAnnouncement={idAnnouncement} /> : null}
+      {showComments ? <CommentList comments={comments} /> : null}
     </Card>
   );
 };
 
-function lookUpVariant(variant: string) {
-  if (variant === "communal") {
+const lookUpVariant = (variant: number) => {
+  if (variant === 1) {
     return "primary";
-  } else if (variant === "administrative") return "warning";
-}
+  } else if (variant === 2) return "warning";
+};
 
 export default Announcement;

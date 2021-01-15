@@ -23,7 +23,7 @@ const Navigation = () => {
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/">NextDoor</Navbar.Brand>
+      <Navbar.Brand href="/">NexDoor</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         {Nav()}

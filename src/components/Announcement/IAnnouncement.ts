@@ -1,17 +1,16 @@
 import IComment from "./Comment/IComment";
 
 interface IAnnouncement {
-  id: number;
+  type: "announcement";
+  idAnnouncement: number;
   idAccount: number;
-  announcementType: string;
+  idAssoc: number;
+  announcementType: number;
   title: string;
-  desc: string;
+  description: string;
   creationDate: string;
   author: string;
-  comments: Array<IComment>;
-  removeAnnouncement: Function;
-  updateAnnouncement: Function;
-  type: "announcement";
+  replays: Array<IComment>;
 }
 
 export default IAnnouncement;

@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useRef, FormEvent, useContext } from "react";
-import { Card, Button } from "react-bootstrap";
+import React, { FormEvent, FunctionComponent, useContext, useRef } from "react";
+import { Button, Card } from "react-bootstrap";
 import IAnnouncementCreator from "./IAnnouncementCreator";
 import { UserContext } from "../../Login/UserContext";
 import { createAnnouncement } from "../../../API/announcements";
-import { ANNOUNCEMENT_TYPE_COMMUNAL } from "../../../constants/constants";
 import { IUser } from "../../Login/IUser";
 import DateToOracleDate from "../../../utils/DateConverter";
+import IAnnouncement from "../IAnnouncement";
 
 export type Props = IAnnouncementCreator;
 
@@ -17,25 +17,21 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
   const submitAnnouncement = async (e: FormEvent) => {
     e.preventDefault();
 
-    let topic: string = "";
-    let desc: string = "";
-    if (inputTopic != null && inputTopic.current != null) {
-      topic = inputTopic.current.value;
-    }
-    if (inputDesc && inputDesc.current) {
-      desc = inputDesc.current.value;
-    }
-    const creationDate = new Date();
-    const newId = await createAnnouncement(
-      user?.idAccount!,
-      ANNOUNCEMENT_TYPE_COMMUNAL,
-      topic,
-      desc,
-      DateToOracleDate(creationDate),
-      user?.idAssoc!
-    );
-    console.log(newId);
-    addNewAnnouncement(user?.idAccount, newId, topic, desc, creationDate.toString());
+    const newAnnouncement: IAnnouncement = {
+      idAssoc: user?.idAssoc ? user.idAssoc : 0,
+      announcementType: user?.accountType == 1 ? 1 : 2,
+      creationDate: DateToOracleDate(new Date()),
+      description: inputDesc?.current?.value ? inputDesc.current.value : "",
+      idAccount: user?.idAccount ? user.idAccount : 0,
+      title: inputTopic?.current?.value ? inputTopic.current.value : "",
+      type: "announcement",
+      idAnnouncement: 0,
+      replays: [],
+      author: "",
+    };
+    //
+    newAnnouncement.idAnnouncement = await createAnnouncement(newAnnouncement);
+    addNewAnnouncement(newAnnouncement);
     hideAnnouncementCreator();
   };
 
@@ -62,7 +58,7 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
               className="form-control w-25"
               placeholder="A place for your topic..."
               required
-            ></input>
+            />
           </div>
           <div className="form-group">
             <label>Description</label>
@@ -72,7 +68,7 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
               ref={inputDesc}
               className="form-control"
               placeholder="What's on your mind?"
-            ></textarea>
+            />
           </div>
         </form>
       </Card.Body>

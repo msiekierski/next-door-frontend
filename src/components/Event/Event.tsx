@@ -1,18 +1,18 @@
-import React, { FunctionComponent, MouseEvent, useState } from "react";
+import React, { FunctionComponent, MouseEvent, useContext, useState } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
 import IEvent from "./IEvent";
+import { UserContext } from "../Login/UserContext";
 
 export type Props = IEvent;
 
-const user: IUser = JSON.parse(localStorage.getItem("user") || "{}");
-
-const Event: FunctionComponent<Props> = ({ idAccount, id, title, desc, creationDate, dateOfEvent }) => {
+const Event: FunctionComponent<Props> = ({ idAccount, title, description, creationDate, dateOfEvent }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
-  const [descriptionEdit, setDescriptionEdit] = useState(desc);
+  const [descriptionEdit, setDescriptionEdit] = useState(description);
+  const user = useContext(UserContext);
 
   console.log(dateOfEvent);
 
@@ -38,7 +38,7 @@ const Event: FunctionComponent<Props> = ({ idAccount, id, title, desc, creationD
   };
 
   const clearEdit = () => {
-    setDescriptionEdit(desc);
+    setDescriptionEdit(description);
     setTitleEdit(title);
   };
 
@@ -61,8 +61,10 @@ const Event: FunctionComponent<Props> = ({ idAccount, id, title, desc, creationD
           </span>
           <div className="flex-column">
             <Card.Subtitle className={`text-right mb-3`}>
-              {user.idAccount === idAccount && !isEditing && <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />}
-              {user.idAccount === idAccount && isEditing && (
+              {user?.idAccount === idAccount && !isEditing && (
+                <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />
+              )}
+              {user?.idAccount === idAccount && isEditing && (
                 <div className={`d-flex justify-content-end`}>
                   <Button size="sm" variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
                     Delete
@@ -81,19 +83,12 @@ const Event: FunctionComponent<Props> = ({ idAccount, id, title, desc, creationD
         </Card.Title>
         <Card.Text>
           {!isEditing ? (
-            desc
+            description
           ) : (
             <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
           )}
         </Card.Text>
-        <Card.Subtitle className={`text-muted text-right`}>
-          {new Date(creationDate).toLocaleDateString()}
-          <br />
-          {new Date(creationDate).toLocaleTimeString(navigator.language, {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Card.Subtitle>
+        <Card.Subtitle className={`text-muted text-right`}>{new Date(creationDate).toLocaleDateString()}</Card.Subtitle>
       </Card.Body>
       <Card.Footer className={`d-flex justify-content-between`}>
         <Card.Link href={``} onClick={handleJoinClick}>

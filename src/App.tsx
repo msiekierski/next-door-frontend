@@ -12,10 +12,9 @@ function App() {
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
+    const loggedUser = localStorage.getItem("user");
+    if (loggedUser) {
+      setUser(JSON.parse(loggedUser));
     } else {
       setUser(null);
     }

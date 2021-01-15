@@ -1,11 +1,10 @@
 interface IEvent {
-  id: number;
+  type: "event";
   idAccount: number;
   title: string;
-  desc: string;
+  description: string;
   creationDate: string;
   dateOfEvent: string;
-  type: "event";
 }
 
 export default IEvent;

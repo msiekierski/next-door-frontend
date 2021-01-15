@@ -4,106 +4,73 @@ import Search from "../Search/Search";
 import IAnnouncement from "../Announcement/IAnnouncement";
 import { getAllAnnouncements } from "../../API/announcements";
 import { UserContext } from "../Login/UserContext";
-import { IUser } from "../Login/IUser";
 import { Card } from "react-bootstrap";
 import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
 import { getAllEvents } from "../../API/events";
-import { IANNOUNCEMENT_TYPE, IEVENT_TYPE } from "../../constants/constants";
+import { ANNOUNCEMENT_TYPE, EVENT_TYPE } from "../../constants/constants";
 
 const Community = () => {
-  const user = useContext<IUser | null>(UserContext);
+  //login
+  const user = useContext(UserContext);
+  //lists
+  const [announcements, setAnnouncements] = useState<Array<IAnnouncement>>([]);
+  const [events, setEvents] = useState<Array<IEvent>>([]);
+
+  //general list
   const [feed, setFeed] = useState<Array<IAnnouncement | IEvent>>([]);
+
+  //togglers
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
 
+  //fetch all data
   useEffect(() => {
-    const fetchFeed = async () => {
-      const annPromise = await getAllAnnouncements(user?.idAssoc);
-      const eventsPromise: Array<IEvent> = await getAllEvents(user?.idAccount!);
-      Promise.all([annPromise, eventsPromise]).then((result) => {
-        result[0].map((ann) => (ann.type = IANNOUNCEMENT_TYPE));
-        result[1].map((event) => (event.type = IEVENT_TYPE));
-        setFeed([...result[0], ...result[1]]);
-      });
+    const fetchData = async () => {
+      const announcements = await getAllAnnouncements(user?.idAssoc);
+      //CHANGE FOR ID ASSOC!
+      console.log(announcements);
+      const events = await getAllEvents(user?.idAccount);
+      //add types
+      const communalAnnouncements = announcements.filter((e) => e.announcementType == 1);
+      communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));
+      events.forEach((e) => (e.type = EVENT_TYPE));
+      setAnnouncements(communalAnnouncements);
+      setEvents(events);
+      setFeed([...communalAnnouncements, ...events].sort((a, b) => a.title.localeCompare(b.title)));
     };
-    fetchFeed();
+    fetchData();
   }, []);
 
-  const deleteAnnouncement = (id: number) => {
-    setFeed(feed.filter((feed) => feed.id !== id));
+  //announcement functions
+  const announcementCallbacks = {
+    createAnnouncement: (announcement: IAnnouncement) => {
+      setFeed([announcement, ...feed].sort((a, b) => a.title.localeCompare(b.title)));
+    },
+    updateAnnouncement: (idAnnouncement: number, titleEdit: string, descriptionEdit: string) => {
+      let index = feed.findIndex((e) => e.type == ANNOUNCEMENT_TYPE && e.idAnnouncement == idAnnouncement);
+      const newFeed = [...feed];
+      newFeed[index].title = titleEdit;
+      newFeed[index].description = descriptionEdit;
+      setFeed(newFeed.sort((a, b) => a.title.localeCompare(b.title)));
+    },
+    removeAnnouncement: (idAnnouncement: number) => {
+      const newAnnouncements = announcements.filter((e) => e.idAnnouncement != idAnnouncement);
+      setAnnouncements(newAnnouncements);
+      setFeed([...newAnnouncements, ...events]);
+    },
   };
 
-  const updateAnnouncement = (id: number, newTitile: string, newDesc: string) => {
-    let newAnn = [...feed];
-    const index: number = newAnn.findIndex((ann) => ann.id === id);
-    newAnn[index].title = newTitile;
-    newAnn[index].desc = newDesc;
-    setFeed(newAnn);
-  };
-
-  const hideAnnouncementCreator = () => {
-    setIsCreatingAnnouncement(false);
-  };
-
-  const addNewAnnouncement = (
-    idAccount: number,
-    idAnnouncement: number,
-    title: string,
-    description: string,
-    creationDate: string
-  ) => {
-    const newAnnouncement: IAnnouncement = {
-      idAccount: idAccount,
-      id: idAnnouncement,
-      announcementType: "communal",
-      title: title,
-      desc: description,
-      creationDate: creationDate,
-      author: user?.name + " " + user?.surname,
-      comments: [],
-      removeAnnouncement: deleteAnnouncement,
-      updateAnnouncement: updateAnnouncement,
-      type: IANNOUNCEMENT_TYPE,
-    };
-    setFeed([newAnnouncement, ...feed]);
-  };
-
-  const getFeedComponent = (feedElement: IAnnouncement | IEvent) => {
-    if (feedElement.type === IANNOUNCEMENT_TYPE) {
-      return (
-        <Announcement
-          key={feedElement.id}
-          id={feedElement.id}
-          idAccount={feedElement.idAccount}
-          announcementType={feedElement.announcementType}
-          title={feedElement.title}
-          desc={feedElement.desc}
-          creationDate={feedElement.creationDate}
-          author={feedElement.author}
-          comments={feedElement.comments}
-          removeAnnouncement={deleteAnnouncement}
-          updateAnnouncement={updateAnnouncement}
-          type={feedElement.type}
-        />
-      );
-    } else if (feedElement.type === IEVENT_TYPE) {
-      console.log(feedElement.creationDate);
-      return (
-        <Event
-          key={feedElement.id}
-          id={feedElement.id}
-          idAccount={feedElement.idAccount}
-          title={feedElement.title}
-          desc={feedElement.desc}
-          creationDate={feedElement.creationDate}
-          dateOfEvent={feedElement.dateOfEvent}
-          type={IEVENT_TYPE}
-        />
-      );
+  const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {
+    if (feedElement.type == ANNOUNCEMENT_TYPE) {
+      return <Announcement key={index} {...feedElement} {...announcementCallbacks} />;
+    }
+    if (feedElement.type == EVENT_TYPE) {
+      return <Event key={index} {...feedElement} />;
     }
   };
+
   return (
     <div>
       <Search />
@@ -117,11 +84,11 @@ const Community = () => {
       </div>
       {isCreatingAnnouncement && (
         <AnnouncementCreator
-          hideAnnouncementCreator={hideAnnouncementCreator}
-          addNewAnnouncement={addNewAnnouncement}
+          hideAnnouncementCreator={() => setIsCreatingAnnouncement(false)}
+          addNewAnnouncement={announcementCallbacks.createAnnouncement}
         />
       )}
-      {feed && feed.length ? feed.map(getFeedComponent) : "Loading..."}
+      {feed && feed.length ? feed.map(generateFeedComponent) : "Loading..."}
     </div>
   );
 };
