@@ -8,6 +8,9 @@ import Announcement from "../../Announcement/Announcement";
 import Search from "../../Search/Search";
 import IAdvertisement from "../Advertisement/IAdvertisement";
 import { getAllAdvertisements } from "../../../API/advertisement";
+import { Card } from "react-bootstrap";
+import AnnouncementCreator from "../../Announcement/Creator/AnnouncementCreator";
+import AdvertisementCreator from "../AdvertisementAddForm/AdvertisementCreator";
 
 interface OwnProps {}
 
@@ -16,6 +19,7 @@ type Props = OwnProps;
 const AdvertisementsPage: FunctionComponent<Props> = (props) => {
   const user = useContext<IUser | null>(UserContext);
   const [advertisements, setAdvertisements] = useState<Array<IAdvertisement>>([]);
+  const [isCreatingAdvertisement, setIsCreatingAdvertisement] = useState(false);
 
   useEffect(() => {
     const fetchAdvertisements = async () => {
@@ -36,6 +40,14 @@ const AdvertisementsPage: FunctionComponent<Props> = (props) => {
     setAdvertisements(newAd);
   };
 
+  const hideAdvertisementCreator = () => {
+    setIsCreatingAdvertisement(false);
+  };
+
+  const addNewAdvert = (newAdvert: IAdvertisement) => {
+    setAdvertisements([newAdvert, ...advertisements]);
+  };
+
   const getAdvertisementComponent = (advertisement: IAdvertisement) => {
     return (
       <Advertisement
@@ -49,26 +61,21 @@ const AdvertisementsPage: FunctionComponent<Props> = (props) => {
         removeAdvertisement={removeAdvertisement}
         updateAdvertisement={updateAdvertisement}
       />
-      // <Announcement
-      //     key={announcement.idAnnouncement}
-      //     idAnnouncement={announcement.idAnnouncement}
-      //     idAccount={announcement.idAccount}
-      //     announcementType={announcement.announcementType}
-      //     title={announcement.title}
-      //     desc={announcement.desc}
-      //     creationDate={announcement.creationDate}
-      //     author={announcement.author}
-      //     comments={announcement.comments}
-      //     removeAnnouncement={deleteAdvertisement}
-      //     updateAdvertisement={updateAdvertisement}
-      // />
     );
   };
 
   return (
     <div>
       <Search />
-      {advertisements && advertisements.length ? advertisements.map(getAdvertisementComponent) : "Loading..."}
+      <div className="d-flex justify-content-between mt-3 ">
+        <Card.Link href="#" onClick={() => setIsCreatingAdvertisement(!isCreatingAdvertisement)}>
+          {isCreatingAdvertisement ? "Hide Creator" : "Create Advertisement"}
+        </Card.Link>
+      </div>
+      {isCreatingAdvertisement && (
+        <AdvertisementCreator hideAdvertisementCreator={hideAdvertisementCreator} addNewAdvertisement={addNewAdvert} />
+      )}
+      {advertisements.length ? advertisements.map(getAdvertisementComponent) : "Loading..."}
     </div>
   );
 };

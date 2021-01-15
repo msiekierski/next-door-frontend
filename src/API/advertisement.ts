@@ -1,7 +1,8 @@
 import axios from "axios";
 import IAdvertisement from "../components/Advertisements/Advertisement/IAdvertisement";
+import { IHousingAssoc } from "../components/Advertisements/AdvertisementAddForm/HousingAssocList/IHousingAssoc";
 
-export async function getAllAdvertisements(idAccount?: number): Promise<Array<IAdvertisement>> {
+export async function getAllAdvertisements(idAccount?: number) {
   try {
     const { data } = await axios.get<Array<IAdvertisement>>(
       `http://localhost:8080/nexDoor/get/ads/advert/${idAccount}`,
@@ -33,5 +34,28 @@ export async function deleteAdvertisement(adId: number) {
     console.log(response);
   } catch (e) {
     console.log(e);
+  }
+}
+
+export async function createAdvertisement(newAdvert: IAdvertisement) {
+  try {
+    const response = await axios.post(`http://localhost:8080/nexDoor/create/announcement`, {
+      ...newAdvert,
+    });
+    return 5;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+export async function getAllHousingAssoc() {
+  try {
+    const { data } = await axios.get<Array<IHousingAssoc>>(`http://localhost:8080/nexDoor/get/housingassoc`, {});
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(e);
+    return [];
   }
 }
