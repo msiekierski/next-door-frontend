@@ -4,7 +4,7 @@ interface IEvent {
   title: string;
   description: string;
   creationDate: string;
-  dateOfEvent: string;
+  eventDate: string;
 }
 
 export default IEvent;

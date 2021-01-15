@@ -8,13 +8,11 @@ import { UserContext } from "../Login/UserContext";
 
 export type Props = IEvent;
 
-const Event: FunctionComponent<Props> = ({ idAccount, title, description, creationDate, dateOfEvent }) => {
+const Event: FunctionComponent<Props> = ({ idAccount, title, description, creationDate, eventDate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(description);
   const user = useContext(UserContext);
-
-  console.log(dateOfEvent);
 
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -66,19 +64,22 @@ const Event: FunctionComponent<Props> = ({ idAccount, title, description, creati
               )}
               {user?.idAccount === idAccount && isEditing && (
                 <div className={`d-flex justify-content-end`}>
-                  <Button size="sm" variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
+                  <Button variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
                     Delete
                   </Button>
-                  <Button size="sm" variant="warning" className="mr-2" onClick={handleCancelEditClick}>
+                  <Button variant="warning" className="mr-2" onClick={handleCancelEditClick}>
                     Cancel
                   </Button>
-                  <Button size="sm" variant="primary" onClick={handleSaveEditClick}>
+                  <Button variant="primary" onClick={handleSaveEditClick}>
                     Save
                   </Button>
                 </div>
               )}
             </Card.Subtitle>
-            <Card.Subtitle className={`text-muted text-right`}>{dateOfEvent}</Card.Subtitle>
+            <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
+            <Card.Subtitle className={`text-muted text-right`}>
+              <u>{new Date(eventDate).toLocaleDateString()}</u>
+            </Card.Subtitle>
           </div>
         </Card.Title>
         <Card.Text>
