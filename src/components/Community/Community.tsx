@@ -32,7 +32,7 @@ const Community = () => {
       const announcements = await getAllAnnouncements(user?.idAssoc);
       //CHANGE FOR ID ASSOC!
       console.log(announcements);
-      const events = await getAllEvents(user?.idAccount);
+      const events = await getAllEvents(user?.idAssoc);
       //add types
       const communalAnnouncements = announcements.filter((e) => e.announcementType == 1);
       communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));

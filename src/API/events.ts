@@ -3,10 +3,9 @@ import IEvent from "../components/Event/IEvent";
 
 export async function putEvent(idEvent: number, title: string, desc: string, eventDate: string) {}
 
-//CHANGE FOR ASSOC!
-export async function getAllEvents(idAccount?: number): Promise<Array<IEvent>> {
+export async function getAllEvents(idAssoc?: number): Promise<Array<IEvent>> {
   try {
-    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/events/${idAccount}`, {});
+    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/events/${idAssoc}`, {});
     return data;
   } catch (e) {
     console.log(e);
