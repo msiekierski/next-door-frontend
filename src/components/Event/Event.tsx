@@ -1,21 +1,33 @@
-import React, { FunctionComponent, MouseEvent, useContext, useState } from "react";
+import React, { FunctionComponent, MouseEvent, useContext, useState, useRef } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
 import IEvent from "./IEvent";
 import { UserContext } from "../Login/UserContext";
-import { deleteEvent } from "../../API/events";
+import { deleteEvent, putEvent } from "../../API/events";
+import oracleDateToInputDate from "../../utils/DateConverter";
 
 export type Props = IEvent & {
   removeEvent: Function;
+  updateEvent: Function;
 };
 
-const Event: FunctionComponent<Props> = ({ idEvent, idCreator, title, description, creationDate, eventDate, removeEvent }) => {
+const Event: FunctionComponent<Props> = ({
+  idEvent,
+  idCreator,
+  title,
+  description,
+  creationDate,
+  eventDate,
+  removeEvent,
+  updateEvent
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(description);
   const user = useContext(UserContext);
+  const inputEventDate = useRef<HTMLInputElement>(null);
 
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -33,7 +45,18 @@ const Event: FunctionComponent<Props> = ({ idEvent, idCreator, title, descriptio
 
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
-    //TODO
+    await putEvent(
+      idEvent,
+      titleEdit,
+      descriptionEdit,
+      inputEventDate?.current?.value ? inputEventDate.current.value : ""
+    );
+    updateEvent(
+      idEvent,
+      titleEdit,
+      descriptionEdit,
+      inputEventDate?.current?.value ? inputEventDate.current.value : ""
+    );
     clearEdit();
     setIsEditing(false);
   };
@@ -49,7 +72,6 @@ const Event: FunctionComponent<Props> = ({ idEvent, idCreator, title, descriptio
     setIsEditing(false);
     removeEvent(idEvent);
   };
-
   return (
     <Card className={`mt-3`}>
       <Card.Header className={`bg-info`} />
@@ -83,12 +105,22 @@ const Event: FunctionComponent<Props> = ({ idEvent, idCreator, title, descriptio
                 </div>
               )}
             </Card.Subtitle>
-            <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
-            <Card.Subtitle className={`text-muted text-right`}>
-              <u>{new Date(eventDate).toLocaleDateString()}</u>
-            </Card.Subtitle>
+            {!isEditing && (
+              <>
+                <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
+                <Card.Subtitle className={`text-muted text-right`}>
+                  <u>{new Date(eventDate).toLocaleDateString()}</u>
+                </Card.Subtitle>
+              </>
+            )}
           </div>
         </Card.Title>
+        {isEditing && (
+          <Card.Text>
+            <input defaultValue={eventDate} ref={inputEventDate} className="form-control w-25" required type="date" />
+          </Card.Text>
+        )}
+
         <Card.Text>
           {!isEditing ? (
             description

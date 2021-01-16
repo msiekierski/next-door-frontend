@@ -71,6 +71,16 @@ const Community = () => {
       setEvents(newEvents);
       setFeed([...announcements, ...newEvents]);
     },
+
+    updateEvent: (idEvent:number, titleEdit: string, descriptionEdit: string, eventDateEdit: string) => {
+      let index = events.findIndex((e) => e.idEvent === idEvent);
+      const newEvents = [...events];
+      newEvents[index].title = titleEdit;
+      newEvents[index].description = descriptionEdit;
+      newEvents[index].eventDate = eventDateEdit;
+      setEvents([...newEvents]);
+      setFeed([...announcements, ...events].sort((a, b) => a.title.localeCompare(b.title)));
+    }
   };
 
   const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {

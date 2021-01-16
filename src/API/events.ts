@@ -1,7 +1,11 @@
 import axios from "axios";
 import IEvent from "../components/Event/IEvent";
 
-export async function putEvent(idEvent: number, title: string, desc: string, eventDate: string) {}
+export async function putEvent(idEvent: number, title: string, desc: string, eventDate: string) {
+  try {
+    await axios.put(`http://localhost:8080/nexDoor/put/event/${idEvent}`, {title, desc, eventDate});
+  } catch (e) {}
+}
 
 export async function getAllEvents(idAssoc?: number): Promise<Array<IEvent>> {
   try {
