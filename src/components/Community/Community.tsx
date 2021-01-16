@@ -10,6 +10,7 @@ import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
 import { getAllEvents } from "../../API/events";
 import { ANNOUNCEMENT_TYPE, EVENT_TYPE } from "../../constants/constants";
+import EventCreator from "../Event/Creator/EventCreator";
 
 const Community = () => {
   //login
@@ -62,6 +63,12 @@ const Community = () => {
     },
   };
 
+  const eventCallbacks = {
+    createEvent: (event: IEvent) => {
+      setFeed([event, ...feed]);
+    },
+  };
+
   const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {
     if (feedElement.type == ANNOUNCEMENT_TYPE) {
       return <Announcement key={index} {...feedElement} {...announcementCallbacks} />;
@@ -71,16 +78,32 @@ const Community = () => {
     }
   };
 
+  const getClassName = ():string => {
+    if (!isCreatingAnnouncement && !isCreatingEvent)
+      return "d-flex justify-content-between mt-3";
+    else if (isCreatingAnnouncement) {
+      return "text-left mt-3"
+    } else {
+      return "text-right mt-3";
+    }
+  }
+
   return (
     <div>
       <Search />
-      <div className="d-flex justify-content-between mt-3 ">
+      <div className={getClassName()}>
         {!isCreatingEvent && (
           <Card.Link href="#" onClick={() => setIsCreatingAnnouncement(!isCreatingAnnouncement)}>
             {isCreatingAnnouncement ? "Hide Creator" : "Create Announcement"}
           </Card.Link>
         )}
-        {!isCreatingAnnouncement && <Card.Link>Create Event</Card.Link>}
+        {!isCreatingAnnouncement && (
+          <div className="text-right">
+            <Card.Link href="#" onClick={() => setIsCreatingEvent(!isCreatingEvent)}>
+              {isCreatingEvent ? "Hide Creator" : "Create Event"}
+            </Card.Link>
+          </div>
+        )}
       </div>
       {isCreatingAnnouncement && (
         <AnnouncementCreator
@@ -88,9 +111,13 @@ const Community = () => {
           addNewAnnouncement={announcementCallbacks.createAnnouncement}
         />
       )}
+      {isCreatingEvent && (
+        <EventCreator hideEventCreator={() => setIsCreatingEvent(false)} addNewEvent={eventCallbacks.createEvent} />
+      )}
       {feed && feed.length ? feed.map(generateFeedComponent) : "Loading..."}
     </div>
   );
 };
+
 
 export default Community;

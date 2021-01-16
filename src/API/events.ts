@@ -13,3 +13,15 @@ export async function getAllEvents(idAccount?: number): Promise<Array<IEvent>> {
     return [];
   }
 }
+
+export async function createEvent(newEvent: IEvent): Promise<number> {
+  try {
+    console.log(newEvent);
+    const {data} = await axios.post(`http://localhost:8080/nexDoor/create/event`, {...newEvent, idGroup: 1, desc: newEvent.description})
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(e);
+    return -1;
+  }
+}

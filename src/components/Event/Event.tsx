@@ -8,7 +8,7 @@ import { UserContext } from "../Login/UserContext";
 
 export type Props = IEvent;
 
-const Event: FunctionComponent<Props> = ({ idAccount, title, description, creationDate, eventDate }) => {
+const Event: FunctionComponent<Props> = ({ idCreator, title, description, creationDate, eventDate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(description);
@@ -59,10 +59,10 @@ const Event: FunctionComponent<Props> = ({ idAccount, title, description, creati
           </span>
           <div className="flex-column">
             <Card.Subtitle className={`text-right mb-3`}>
-              {user?.idAccount === idAccount && !isEditing && (
+              {user?.idAccount === idCreator && !isEditing && (
                 <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />
               )}
-              {user?.idAccount === idAccount && isEditing && (
+              {user?.idAccount === idCreator && isEditing && (
                 <div className={`d-flex justify-content-end`}>
                   <Button variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
                     Delete
