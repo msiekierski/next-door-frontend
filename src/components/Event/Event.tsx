@@ -5,10 +5,13 @@ import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
 import IEvent from "./IEvent";
 import { UserContext } from "../Login/UserContext";
+import { deleteEvent } from "../../API/events";
 
-export type Props = IEvent;
+export type Props = IEvent & {
+  removeEvent: Function;
+};
 
-const Event: FunctionComponent<Props> = ({ idCreator, title, description, creationDate, eventDate }) => {
+const Event: FunctionComponent<Props> = ({ idEvent, idCreator, title, description, creationDate, eventDate, removeEvent }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(description);
@@ -42,7 +45,9 @@ const Event: FunctionComponent<Props> = ({ idCreator, title, description, creati
 
   const handleDeleteEditClick = async (e: MouseEvent) => {
     e.preventDefault();
-    //TODO
+    await deleteEvent(idEvent);
+    setIsEditing(false);
+    removeEvent(idEvent);
   };
 
   return (
@@ -60,7 +65,9 @@ const Event: FunctionComponent<Props> = ({ idCreator, title, description, creati
           <div className="flex-column">
             <Card.Subtitle className={`text-right mb-3`}>
               {user?.idAccount === idCreator && !isEditing && (
-                <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />
+                <span className={`btn`}>
+                  <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />{" "}
+                </span>
               )}
               {user?.idAccount === idCreator && isEditing && (
                 <div className={`d-flex justify-content-end`}>

@@ -30,8 +30,6 @@ const Community = () => {
   useEffect(() => {
     const fetchData = async () => {
       const announcements = await getAllAnnouncements(user?.idAssoc);
-      //CHANGE FOR ID ASSOC!
-      console.log(announcements);
       const events = await getAllEvents(user?.idAssoc);
       //add types
       const communalAnnouncements = announcements.filter((e) => e.announcementType == 1);
@@ -67,6 +65,12 @@ const Community = () => {
     createEvent: (event: IEvent) => {
       setFeed([event, ...feed]);
     },
+
+    removeEvent: (idEvent: number) => {
+      const newEvents = events.filter((e) => e.idEvent !== idEvent);
+      setEvents(newEvents);
+      setFeed([...announcements, ...newEvents]);
+    },
   };
 
   const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {
@@ -74,19 +78,18 @@ const Community = () => {
       return <Announcement key={index} {...feedElement} {...announcementCallbacks} />;
     }
     if (feedElement.type == EVENT_TYPE) {
-      return <Event key={index} {...feedElement} />;
+      return <Event key={index} {...feedElement} {...eventCallbacks} />;
     }
   };
 
-  const getClassName = ():string => {
-    if (!isCreatingAnnouncement && !isCreatingEvent)
-      return "d-flex justify-content-between mt-3";
+  const getClassName = (): string => {
+    if (!isCreatingAnnouncement && !isCreatingEvent) return "d-flex justify-content-between mt-3";
     else if (isCreatingAnnouncement) {
-      return "text-left mt-3"
+      return "text-left mt-3";
     } else {
       return "text-right mt-3";
     }
-  }
+  };
 
   return (
     <div>
@@ -118,6 +121,5 @@ const Community = () => {
     </div>
   );
 };
-
 
 export default Community;
