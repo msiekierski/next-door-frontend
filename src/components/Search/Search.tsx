@@ -1,21 +1,24 @@
-import React, { FunctionComponent, MouseEvent } from "react";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
+import React, { ChangeEvent, FormEvent, FunctionComponent, useState } from "react";
+import { FormControl, InputGroup } from "react-bootstrap";
+import IAnnouncement from "../Announcement/IAnnouncement";
+import IEvent from "../Event/IEvent";
 
-interface OwnProps {}
+interface OwnProps {
+  baseFeed: Array<IAnnouncement | IEvent>;
+  setFiltered: Function;
+}
 
 type Props = OwnProps;
 
-const Search: FunctionComponent<Props> = (props) => {
-  const clicked = (event: MouseEvent) => {};
+const Search: FunctionComponent<Props> = ({ setFiltered, baseFeed }) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const filter = event.target.value.toLowerCase().trim();
+    setFiltered(baseFeed.filter((e) => e.title.toLowerCase().includes(filter)));
+  };
 
   return (
     <InputGroup className={`mt-3`}>
-      <FormControl placeholder="Search..." aria-label="Search..." />
-      <InputGroup.Append>
-        <Button onClick={clicked} variant="outline-secondary">
-          Search
-        </Button>
-      </InputGroup.Append>
+      <FormControl placeholder="Search..." aria-label="Search..." onChange={handleInputChange} />
     </InputGroup>
   );
 };

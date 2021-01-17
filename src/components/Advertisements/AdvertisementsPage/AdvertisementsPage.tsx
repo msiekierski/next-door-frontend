@@ -66,7 +66,7 @@ const AdvertisementsPage: FunctionComponent<Props> = (props) => {
 
   return (
     <div>
-      <Search />
+      {/*<Search />*/}
       <div className="d-flex justify-content-between mt-3 ">
         <Card.Link href="#" onClick={() => setIsCreatingAdvertisement(!isCreatingAdvertisement)}>
           {isCreatingAdvertisement ? "Hide Creator" : "Create Advertisement"}

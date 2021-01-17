@@ -39,7 +39,7 @@ const announcements: Array<IAnnouncementAdmin> = [
 const Administration = () => {
   return (
     <div>
-      <Search />
+      {/*<Search />*/}
       {announcements.map(getAnnouncementComponent)}
     </div>
   );

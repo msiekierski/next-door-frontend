@@ -9,7 +9,7 @@ import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
 import { getAllEvents } from "../../API/events";
-import { ANNOUNCEMENT_TYPE, EVENT_TYPE } from "../../constants/constants";
+import { ANNOUNCEMENT_TYPE, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
 import EventCreator from "../Event/Creator/EventCreator";
 
 const Community = () => {
@@ -21,7 +21,7 @@ const Community = () => {
 
   //general list
   const [feed, setFeed] = useState<Array<IAnnouncement | IEvent>>([]);
-
+  const [filtered, setFiltered] = useState<Array<IAnnouncement | IEvent>>([]);
   //togglers
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
@@ -37,7 +37,9 @@ const Community = () => {
       events.forEach((e) => (e.type = EVENT_TYPE));
       setAnnouncements(communalAnnouncements);
       setEvents(events);
-      setFeed([...communalAnnouncements, ...events].sort((a, b) => a.title.localeCompare(b.title)));
+      const initialFeed = [...communalAnnouncements, ...events].sort(sortByDate);
+      setFeed(initialFeed);
+      setFiltered(initialFeed);
     };
     fetchData();
   }, []);
@@ -45,42 +47,53 @@ const Community = () => {
   //announcement functions
   const announcementCallbacks = {
     createAnnouncement: (announcement: IAnnouncement) => {
-      setFeed([announcement, ...feed].sort((a, b) => a.title.localeCompare(b.title)));
+      const newFeed = [announcement, ...feed].sort(sortByDate);
+      updateFeeds(newFeed);
     },
     updateAnnouncement: (idAnnouncement: number, titleEdit: string, descriptionEdit: string) => {
       let index = feed.findIndex((e) => e.type == ANNOUNCEMENT_TYPE && e.idAnnouncement == idAnnouncement);
-      const newFeed = [...feed];
-      newFeed[index].title = titleEdit;
-      newFeed[index].description = descriptionEdit;
-      setFeed(newFeed.sort((a, b) => a.title.localeCompare(b.title)));
+      const updated = [...feed];
+      updated[index].title = titleEdit;
+      updated[index].description = descriptionEdit;
+      const newFeed = updated.sort(sortByDate);
+      updateFeeds(newFeed);
     },
     removeAnnouncement: (idAnnouncement: number) => {
       const newAnnouncements = announcements.filter((e) => e.idAnnouncement != idAnnouncement);
       setAnnouncements(newAnnouncements);
-      setFeed([...newAnnouncements, ...events]);
+      const newFeed = [...newAnnouncements, ...events];
+      updateFeeds(newFeed);
     },
+  };
+
+  const updateFeeds = (newFeed: Array<IAnnouncement | IEvent>) => {
+    setFeed(newFeed);
+    setFiltered(newFeed);
   };
 
   const eventCallbacks = {
     createEvent: (event: IEvent) => {
-      setFeed([event, ...feed]);
+      const newFeed = [event, ...feed].sort(sortByDate);
+      updateFeeds(newFeed);
     },
 
     removeEvent: (idEvent: number) => {
       const newEvents = events.filter((e) => e.idEvent !== idEvent);
       setEvents(newEvents);
-      setFeed([...announcements, ...newEvents]);
+      const newFeed = [...announcements, ...newEvents];
+      updateFeeds(newFeed);
     },
 
-    updateEvent: (idEvent:number, titleEdit: string, descriptionEdit: string, eventDateEdit: string) => {
+    updateEvent: (idEvent: number, titleEdit: string, descriptionEdit: string, eventDateEdit: string) => {
       let index = events.findIndex((e) => e.idEvent === idEvent);
       const newEvents = [...events];
       newEvents[index].title = titleEdit;
       newEvents[index].description = descriptionEdit;
       newEvents[index].eventDate = eventDateEdit;
       setEvents([...newEvents]);
-      setFeed([...announcements, ...events].sort((a, b) => a.title.localeCompare(b.title)));
-    }
+      const newFeed = [...announcements, ...events].sort(sortByDate);
+      updateFeeds(newFeed);
+    },
   };
 
   const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {
@@ -103,7 +116,7 @@ const Community = () => {
 
   return (
     <div>
-      <Search />
+      <Search baseFeed={feed} setFiltered={setFiltered} />
       <div className={getClassName()}>
         {!isCreatingEvent && (
           <Card.Link href="#" onClick={() => setIsCreatingAnnouncement(!isCreatingAnnouncement)}>
@@ -127,9 +140,13 @@ const Community = () => {
       {isCreatingEvent && (
         <EventCreator hideEventCreator={() => setIsCreatingEvent(false)} addNewEvent={eventCallbacks.createEvent} />
       )}
-      {feed && feed.length ? feed.map(generateFeedComponent) : "Loading..."}
+      {filtered && filtered.length ? filtered.map(generateFeedComponent) : "Loading..."}
     </div>
   );
 };
+
+function sortByDate(a: IAnnouncement | IEvent, b: IAnnouncement | IEvent) {
+  return Number(new Date(b.creationDate)) - Number(new Date(a.creationDate));
+}
 
 export default Community;
