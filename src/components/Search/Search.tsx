@@ -5,16 +5,14 @@ import IEvent from "../Event/IEvent";
 
 interface OwnProps {
   setFilter: Function;
-  sort: Function;
 }
 
 type Props = OwnProps;
 
-const Search: FunctionComponent<Props> = ({ setFilter, sort }) => {
+const Search: FunctionComponent<Props> = ({ setFilter }) => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const filter = event.target.value.toLowerCase().trim();
     setFilter(filter);
-    sort();
   };
 
   return (

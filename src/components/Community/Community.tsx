@@ -15,7 +15,6 @@ import EventCreator from "../Event/Creator/EventCreator";
 const Community = () => {
   //login
   const user = useContext(UserContext);
-
   //general list
   const [feed, setFeed] = useState<Array<IAnnouncement | IEvent>>([]);
   const [filter, setFilter] = useState("");
@@ -34,26 +33,14 @@ const Community = () => {
       communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));
       events.forEach((e) => (e.type = EVENT_TYPE));
       setFeed([...communalAnnouncements, ...events]);
-      sortAndFilter();
     };
     fetchData();
   }, []);
 
-  const sortAndFilter = () => {
-    setFeed((feed) => feed.sort(sortByDate).filter(filterByPhrase));
-
-    function sortByDate(a: IAnnouncement | IEvent, b: IAnnouncement | IEvent) {
-      return Number(new Date(b.creationDate)) - Number(new Date(a.creationDate));
-    }
-    function filterByPhrase(e: IAnnouncement | IEvent): boolean {
-      return e.title.toLowerCase().includes(filter);
-    }
-  };
   //announcement functions
   const feedCallbacks = {
     createFeed: (announcement: IAnnouncement | IEvent) => {
       setFeed((feed) => [announcement, ...feed]);
-      sortAndFilter();
     },
     updateFeed: (type: string, id: number, titleEdit: string, descriptionEdit: string) => {
       let index;
@@ -66,7 +53,6 @@ const Community = () => {
       newFeed[index].title = titleEdit;
       newFeed[index].description = descriptionEdit;
       setFeed(newFeed);
-      sortAndFilter();
     },
     removeFeed: (type: string, id: number) => {
       if (type == ANNOUNCEMENT_TYPE) {
@@ -74,7 +60,6 @@ const Community = () => {
       } else {
         setFeed((feed) => feed.filter((e) => e.type != EVENT_TYPE || e.idEvent != id));
       }
-      sortAndFilter();
     },
   };
 
@@ -98,7 +83,7 @@ const Community = () => {
 
   return (
     <div>
-      <Search setFilter={setFilter} sort={sortAndFilter} />
+      <Search setFilter={setFilter} />
       <div className={getClassName()}>
         {!isCreatingEvent && (
           <Card.Link href="#" onClick={() => setIsCreatingAnnouncement(!isCreatingAnnouncement)}>
@@ -122,9 +107,16 @@ const Community = () => {
       {isCreatingEvent && (
         <EventCreator hideEventCreator={() => setIsCreatingEvent(false)} createFeed={feedCallbacks.createFeed} />
       )}
-      {feed && feed.length ? feed.map(generateFeedComponent) : "Loading..."}
+      {feed && feed.length ? feed.sort(sortByDate).filter(filterByPhrase).map(generateFeedComponent) : "Loading..."}
     </div>
   );
+
+  function sortByDate(a: IAnnouncement | IEvent, b: IAnnouncement | IEvent) {
+    return Number(new Date(b.creationDate)) - Number(new Date(a.creationDate));
+  }
+  function filterByPhrase(e: IAnnouncement | IEvent): boolean {
+    return e.title.toLowerCase().includes(filter);
+  }
 };
 
 export default Community;
