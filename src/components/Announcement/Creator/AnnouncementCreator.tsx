@@ -4,12 +4,11 @@ import IAnnouncementCreator from "./IAnnouncementCreator";
 import { UserContext } from "../../Login/UserContext";
 import { createAnnouncement } from "../../../API/announcements";
 import { IUser } from "../../Login/IUser";
-import DateToOracleDate from "../../../utils/DateConverter";
 import IAnnouncement from "../IAnnouncement";
 
 export type Props = IAnnouncementCreator;
 
-const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator, addNewAnnouncement }) => {
+const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator, createFeed }) => {
   const inputTopic = useRef<HTMLInputElement>(null);
   const inputDesc = useRef<HTMLTextAreaElement>(null);
   const user = useContext<IUser | null>(UserContext);
@@ -20,7 +19,7 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
     const newAnnouncement: IAnnouncement = {
       idAssoc: user?.idAssoc ? user.idAssoc : 0,
       announcementType: user?.accountType == 1 ? 1 : 2,
-      creationDate: DateToOracleDate(new Date()),
+      creationDate: new Date().toDateString() + " " + new Date().toLocaleTimeString(),
       description: inputDesc?.current?.value ? inputDesc.current.value : "",
       idAccount: user?.idAccount ? user.idAccount : 0,
       title: inputTopic?.current?.value ? inputTopic.current.value : "",
@@ -29,9 +28,10 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
       replays: [],
       author: "",
     };
+    console.log(newAnnouncement);
     //
     newAnnouncement.idAnnouncement = await createAnnouncement(newAnnouncement);
-    addNewAnnouncement(newAnnouncement);
+    createFeed(newAnnouncement);
     hideAnnouncementCreator();
   };
 

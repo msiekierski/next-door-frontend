@@ -4,16 +4,17 @@ import IAnnouncement from "../Announcement/IAnnouncement";
 import IEvent from "../Event/IEvent";
 
 interface OwnProps {
-  baseFeed: Array<IAnnouncement | IEvent>;
-  setFiltered: Function;
+  setFilter: Function;
+  sort: Function;
 }
 
 type Props = OwnProps;
 
-const Search: FunctionComponent<Props> = ({ setFiltered, baseFeed }) => {
+const Search: FunctionComponent<Props> = ({ setFilter, sort }) => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const filter = event.target.value.toLowerCase().trim();
-    setFiltered(baseFeed.filter((e) => e.title.toLowerCase().includes(filter)));
+    setFilter(filter);
+    sort();
   };
 
   return (

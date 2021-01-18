@@ -7,10 +7,11 @@ import DateToOracleDate from "../../../utils/DateConverter";
 import IEventCreator from "./IEventCreator";
 import IEvent from "../IEvent";
 import { createEvent } from "../../../API/events";
+import { EVENT_TYPE } from "../../../constants/constants";
 
 export type Props = IEventCreator;
 
-const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, addNewEvent }) => {
+const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, createFeed }) => {
   const inputTopic = useRef<HTMLInputElement>(null);
   const inputDesc = useRef<HTMLTextAreaElement>(null);
   const inputEventDate = useRef<HTMLInputElement>(null);
@@ -21,7 +22,7 @@ const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, addNewEvent 
 
     const newEvent: IEvent = {
       idAssoc: user?.idAssoc ? user.idAssoc : 0,
-      creationDate: DateToOracleDate(new Date()),
+      creationDate: new Date().toDateString() + " " + new Date().toLocaleTimeString(),
       description: inputDesc?.current?.value ? inputDesc.current.value : "",
       idCreator: user?.idAccount ? user.idAccount : 0,
       title: inputTopic?.current?.value ? inputTopic.current.value : "",
@@ -31,7 +32,7 @@ const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, addNewEvent 
     };
     //
     newEvent.idEvent = await createEvent(newEvent);
-    addNewEvent(newEvent);
+    createFeed(newEvent);
     hideEventCreator();
   };
 

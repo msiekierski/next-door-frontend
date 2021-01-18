@@ -7,10 +7,11 @@ import IEvent from "./IEvent";
 import { UserContext } from "../Login/UserContext";
 import { deleteEvent, putEvent } from "../../API/events";
 import oracleDateToInputDate from "../../utils/DateConverter";
+import { EVENT_TYPE } from "../../constants/constants";
 
 export type Props = IEvent & {
-  removeEvent: Function;
-  updateEvent: Function;
+  removeFeed: Function;
+  updateFeed: Function;
 };
 
 const Event: FunctionComponent<Props> = ({
@@ -20,8 +21,8 @@ const Event: FunctionComponent<Props> = ({
   description,
   creationDate,
   eventDate,
-  removeEvent,
-  updateEvent
+  removeFeed,
+  updateFeed,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -51,7 +52,8 @@ const Event: FunctionComponent<Props> = ({
       descriptionEdit,
       inputEventDate?.current?.value ? inputEventDate.current.value : ""
     );
-    updateEvent(
+    updateFeed(
+      EVENT_TYPE,
       idEvent,
       titleEdit,
       descriptionEdit,
@@ -70,7 +72,7 @@ const Event: FunctionComponent<Props> = ({
     e.preventDefault();
     await deleteEvent(idEvent);
     setIsEditing(false);
-    removeEvent(idEvent);
+    removeFeed(EVENT_TYPE, idEvent);
   };
   return (
     <Card className={`mt-3`}>
@@ -128,7 +130,11 @@ const Event: FunctionComponent<Props> = ({
             <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
           )}
         </Card.Text>
-        <Card.Subtitle className={`text-muted text-right`}>{new Date(creationDate).toLocaleDateString()}</Card.Subtitle>
+        <Card.Subtitle className={`text-muted text-right`}>
+          {new Date(creationDate).toLocaleDateString()}
+          <br />
+          {new Date(creationDate).toLocaleTimeString()}
+        </Card.Subtitle>
       </Card.Body>
       <Card.Footer className={`d-flex justify-content-between`}>
         <Card.Link href={``} onClick={handleJoinClick}>

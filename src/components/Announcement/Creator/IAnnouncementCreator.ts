@@ -1,6 +1,6 @@
 interface IAnnouncementCreator {
   hideAnnouncementCreator: Function;
-  addNewAnnouncement: Function;
+  createFeed: Function;
 }
 
 export default IAnnouncementCreator;

@@ -8,10 +8,11 @@ import CommentList from "./CommentList/CommentList";
 import Reply from "./Reply/Reply";
 import IComment from "./Comment/IComment";
 import { UserContext } from "../Login/UserContext";
+import { ANNOUNCEMENT_TYPE } from "../../constants/constants";
 
 export type Props = IAnnouncement & {
-  removeAnnouncement: Function;
-  updateAnnouncement: Function;
+  removeFeed: Function;
+  updateFeed: Function;
 };
 
 const Announcement: FunctionComponent<Props> = ({
@@ -23,8 +24,8 @@ const Announcement: FunctionComponent<Props> = ({
   creationDate,
   author,
   replays,
-  removeAnnouncement,
-  updateAnnouncement,
+  removeFeed,
+  updateFeed,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -57,7 +58,7 @@ const Announcement: FunctionComponent<Props> = ({
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
     await putAnnouncement(idAnnouncement, announcementType, titleEdit, descriptionEdit);
-    updateAnnouncement(idAnnouncement, titleEdit, descriptionEdit);
+    updateFeed(ANNOUNCEMENT_TYPE, idAnnouncement, titleEdit, descriptionEdit);
     clearEdit();
     setIsEditing(false);
   };
@@ -71,7 +72,7 @@ const Announcement: FunctionComponent<Props> = ({
     e.preventDefault();
     await deleteAnnouncement(idAnnouncement);
     setIsEditing(false);
-    removeAnnouncement(idAnnouncement);
+    removeFeed(ANNOUNCEMENT_TYPE, idAnnouncement);
   };
 
   const variant = lookUpVariant(announcementType);
@@ -119,7 +120,11 @@ const Announcement: FunctionComponent<Props> = ({
             <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
           )}
         </Card.Text>
-        <Card.Subtitle className={`text-muted text-right`}>{new Date(creationDate).toLocaleDateString()}</Card.Subtitle>
+        <Card.Subtitle className={`text-muted text-right`}>
+          {new Date(creationDate).toLocaleDateString()}
+          <br />
+          {new Date(creationDate).toLocaleTimeString()}
+        </Card.Subtitle>
       </Card.Body>
       <Card.Footer className={`d-flex justify-content-between`}>
         <Card.Link href={``} onClick={handleReplyClick}>
