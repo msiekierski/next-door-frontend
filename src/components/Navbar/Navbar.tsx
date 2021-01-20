@@ -5,18 +5,19 @@ import { UserContext } from "../Login/UserContext";
 import LinksResident from "./LinksResident";
 import LinksAdvertiser from "./LinksAdvertiser";
 import LinksAdministrator from "./LinksAdministrator";
+import { ACCOUNT_TYPE_ADMINISTRATOR, ACCOUNT_TYPE_ADVERTISER, ACCOUNT_TYPE_RESIDENT } from "../../constants/constants";
 
 const Navigation = () => {
   const user = useContext(UserContext);
 
   function Nav() {
-    if (user?.accountType == 1) {
+    if (user?.accountType == ACCOUNT_TYPE_RESIDENT) {
       return <LinksResident />;
     }
-    if (user?.accountType == 2) {
+    if (user?.accountType == ACCOUNT_TYPE_ADVERTISER) {
       return <LinksAdvertiser />;
     }
-    if (user?.accountType == 3) {
+    if (user?.accountType == ACCOUNT_TYPE_ADMINISTRATOR) {
       return <LinksAdministrator />;
     }
   }

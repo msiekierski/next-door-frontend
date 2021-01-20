@@ -10,3 +10,7 @@ export const ADVERT_PER_ONE_PAYMENT: number = 10;
 export const SEARCH_COMMUNITY = 1;
 export const SEARCH_ADMINISTRATION = 2;
 export const SEARCH_ADD = 3;
+
+export const ACCOUNT_TYPE_RESIDENT = 1;
+export const ACCOUNT_TYPE_ADVERTISER = 2;
+export const ACCOUNT_TYPE_ADMINISTRATOR = 3;

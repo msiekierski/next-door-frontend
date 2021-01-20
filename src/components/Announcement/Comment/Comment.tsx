@@ -9,8 +9,12 @@ const Comment: FunctionComponent<Props> = ({ description, creationDate }) => {
     <Card>
       <Card.Body>
         <Card.Title className={`d-flex justify-content-between`}>
-          <Card.Subtitle className={`text-muted`}></Card.Subtitle>
-          <Card.Subtitle className={`text-muted text-right`}>{creationDate}</Card.Subtitle>
+          <Card.Subtitle className={`text-muted`}>Author</Card.Subtitle>
+          <Card.Subtitle className={`text-muted text-right`}>
+            {new Date(creationDate).toLocaleDateString()}
+            <br />
+            {new Date(creationDate).toLocaleTimeString()}
+          </Card.Subtitle>
         </Card.Title>
         <Card.Text>{description}</Card.Text>
       </Card.Body>

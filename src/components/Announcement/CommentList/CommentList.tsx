@@ -12,14 +12,17 @@ type Props = OwnProps;
 const CommentList: FunctionComponent<Props> = ({ comments }) => {
   return (
     <ListGroup>
-      {comments.map((comment) => (
-        <Comment
-          idAccount={comment.idAccount}
-          idAnnouncement={comment.idAnnouncement}
-          creationDate={comment.creationDate}
-          description={comment.description}
-        />
-      ))}
+      {comments
+        .sort((a, b) => Number(new Date(b.creationDate)) - Number(new Date(a.creationDate)))
+        .map((comment, index) => (
+          <Comment
+            key={index}
+            idAccount={comment.idAccount}
+            idAnnouncement={comment.idAnnouncement}
+            creationDate={comment.creationDate}
+            description={comment.description}
+          />
+        ))}
     </ListGroup>
   );
 };

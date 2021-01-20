@@ -42,6 +42,7 @@ const Announcement: FunctionComponent<Props> = ({
   const handleReplyClick = (e: MouseEvent) => {
     e.preventDefault();
     setReply(!reply);
+    setShowComments(true);
   };
 
   const handleShowRepliesClick = (e: MouseEvent) => {
@@ -131,7 +132,7 @@ const Announcement: FunctionComponent<Props> = ({
           Reply
         </Card.Link>
         <Card.Link href={``} onClick={handleShowRepliesClick}>
-          {comments.length ? "Show replies" : null}
+          {comments.length ? `Show ${comments.length} replies` : null}
         </Card.Link>
       </Card.Footer>
       {reply ? <Reply commentAdd={commentAdd} idAnnouncement={idAnnouncement} /> : null}

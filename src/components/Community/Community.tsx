@@ -9,7 +9,7 @@ import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
 import { getAllEvents } from "../../API/events";
-import { ANNOUNCEMENT_TYPE, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
+import { ANNOUNCEMENT_TYPE, ANNOUNCEMENT_TYPE_COMMUNAL, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
 import EventCreator from "../Event/Creator/EventCreator";
 
 const Community = () => {
@@ -29,7 +29,7 @@ const Community = () => {
       const announcements = await getAllAnnouncements(user?.idAssoc);
       const events = await getAllEvents(user?.idAssoc);
       //add types
-      const communalAnnouncements = announcements.filter((e) => e.announcementType == 1);
+      const communalAnnouncements = announcements.filter((e) => e.announcementType == ANNOUNCEMENT_TYPE_COMMUNAL);
       communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));
       events.forEach((e) => (e.type = EVENT_TYPE));
       setFeed([...communalAnnouncements, ...events]);
