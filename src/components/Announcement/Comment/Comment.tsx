@@ -1,10 +1,12 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import IComment from "./IComment";
 
 type Props = IComment;
 
 const Comment: FunctionComponent<Props> = ({ description, creationDate }) => {
+  useEffect(() => {}, []);
+
   return (
     <Card>
       <Card.Body>
