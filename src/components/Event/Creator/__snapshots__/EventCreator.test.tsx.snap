@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mt-2 card"
+>
+  <div
+    className="card-body"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="form-group justify-content-flex"
+      >
+        <div
+          className="d-flex justify-content-between"
+        >
+          <label>
+            Topic
+          </label>
+          <div>
+            <button
+              className="mr-2 btn btn-warning"
+              disabled={false}
+              onClick={[Function]}
+              type="submit"
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+        <input
+          className="form-control w-25"
+          maxLength={50}
+          placeholder="A place for your topic..."
+          required={true}
+          type="text"
+        />
+      </div>
+      <div
+        className="form-group"
+      >
+        <label>
+          Event's date
+        </label>
+        <br />
+        <input
+          className="form-control w-25"
+          required={true}
+          type="date"
+        />
+      </div>
+      <div
+        className="form-group"
+      >
+        <label>
+          Description
+        </label>
+        <textarea
+          className="form-control"
+          maxLength={250}
+          placeholder="Your event's description..."
+          required={true}
+        />
+      </div>
+    </form>
+  </div>
+</div>
+`;

@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mt-3 card"
+>
+  <div
+    className="bg-info card-header"
+  />
+  <div
+    className="card-body"
+  >
+    <div
+      className="d-flex justify-content-between card-title h5"
+    >
+      <span>
+        New event
+      </span>
+      <div
+        className="flex-column"
+      >
+        <div
+          className="text-right mb-3 card-subtitle h6"
+        />
+        <div
+          className="text-muted text-right mb-2 card-subtitle h6"
+        >
+          Takes place on:
+        </div>
+        <div
+          className="text-muted text-right card-subtitle h6"
+        >
+          <u>
+            Invalid Date
+          </u>
+        </div>
+      </div>
+    </div>
+    <p
+      className="card-text"
+    >
+      Come, join us!
+    </p>
+    <div
+      className="text-muted text-right card-subtitle h6"
+    >
+      2021-1-22
+      <br />
+      1:31:29
+    </div>
+  </div>
+  <div
+    className="d-flex justify-content-between card-footer"
+  >
+    <a
+      className="card-link"
+      href=""
+      onClick={[Function]}
+    >
+      Join
+    </a>
+    <a
+      className="card-link"
+      href=""
+      onClick={[Function]}
+    >
+      0 participiants
+    </a>
+  </div>
+</div>
+`;

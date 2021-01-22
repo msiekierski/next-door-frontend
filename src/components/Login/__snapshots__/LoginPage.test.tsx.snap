@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="vh-100 d-flex align-items-center bg-secondary"
+>
+  <div
+    className="w-50 m-auto container"
+  >
+    <div
+      className="p-5 bg-primary text-white container"
+    >
+      <h2
+        className="mb-3"
+      >
+        Login
+      </h2>
+      <form
+        className=""
+        onSubmit={[Function]}
+      >
+        <div
+          className="form-group"
+        >
+          <label
+            className="form-label"
+            htmlFor="formBasicEmail"
+          >
+            Login
+          </label>
+          <input
+            className="form-control"
+            id="formBasicEmail"
+            onChange={[Function]}
+            placeholder="Enter email"
+            type="text"
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            className="form-label"
+            htmlFor="formBasicPassword"
+          >
+            Password
+          </label>
+          <input
+            className="form-control"
+            id="formBasicPassword"
+            onChange={[Function]}
+            placeholder="Password"
+            type="password"
+          />
+        </div>
+        <button
+          className="d-block ml-auto btn btn-light"
+          disabled={false}
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+`;

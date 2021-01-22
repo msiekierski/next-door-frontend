@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="pl-0 pr-0 list-group-item"
+  disabled={false}
+  onClick={[Function]}
+>
+  <div
+    className="d-flex justify-content-between container"
+  >
+    <label
+      className="mb-0 form-label"
+    >
+      My Assoc
+      , 
+      Rynek
+    </label>
+    <div
+      className="form-check"
+    >
+      <input
+        className="form-check-input position-static"
+        disabled={false}
+        onChange={[Function]}
+        type="checkbox"
+      />
+    </div>
+  </div>
+</div>
+`;

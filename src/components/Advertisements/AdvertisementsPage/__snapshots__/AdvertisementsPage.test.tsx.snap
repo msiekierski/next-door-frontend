@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    className="d-flex justify-content-between mt-3 "
+  >
+    <a
+      className="card-link"
+      href="#"
+      onClick={[Function]}
+    >
+      Create Advertisement
+    </a>
+  </div>
+  Loading...
+</div>
+`;
