@@ -1,5 +1,6 @@
 import axios from "axios";
 import IEvent from "../components/Event/IEvent";
+import IEventUser from "../components/Event/IEventUser";
 
 export async function putEvent(idEvent: number, title: string, desc: string, eventDate: string) {
   try {
@@ -35,4 +36,11 @@ export async function deleteEvent(idEvent: number) {
   try {
     await axios.delete(`http://localhost:8080/nexDoor/delete/event/${idEvent}`, {});
   } catch (e) {}
+}
+
+export async function getUsers(idEvent: number):Promise<Array<IEventUser>> {
+  try {
+    const {data} = await axios.get(`http://localhost:8080/nexDoor/get/account/event/${idEvent}`);
+    return data;
+  } catch (e) {return []}
 }

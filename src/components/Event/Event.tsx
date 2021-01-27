@@ -1,13 +1,16 @@
-import React, { FunctionComponent, MouseEvent, useContext, useState, useRef } from "react";
+import React, { FunctionComponent, MouseEvent, useContext, useState, useRef, useEffect } from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
 import IEvent from "./IEvent";
 import { UserContext } from "../Login/UserContext";
-import { deleteEvent, putEvent } from "../../API/events";
+import { deleteEvent, getUsers, putEvent } from "../../API/events";
 import oracleDateToInputDate from "../../utils/DateConverter";
 import { EVENT_TYPE } from "../../constants/constants";
+import { getUser } from "../../API/login";
+import IEventUser from "./IEventUser";
+import EventUsers from "./Users/EventUsers"
 
 export type Props = IEvent & {
   removeFeed: Function;
@@ -29,6 +32,16 @@ const Event: FunctionComponent<Props> = ({
   const [descriptionEdit, setDescriptionEdit] = useState(description);
   const user = useContext(UserContext);
   const inputEventDate = useRef<HTMLInputElement>(null);
+  const [users, setUsers] = useState<Array<IEventUser>>([]);
+  const [showUsers, setShowUsers] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const eventUsers = await getUsers(idEvent);
+      setUsers(eventUsers);
+    };
+    fetch();
+  }, []);
 
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -36,6 +49,7 @@ const Event: FunctionComponent<Props> = ({
 
   const handleShowParticipiants = (e: MouseEvent) => {
     e.preventDefault();
+    setShowUsers(true);
   };
 
   const handleCancelEditClick = (e: MouseEvent) => {
@@ -75,6 +89,7 @@ const Event: FunctionComponent<Props> = ({
     removeFeed(EVENT_TYPE, idEvent);
   };
   return (
+    <>
     <Card className={`mt-3`}>
       <Card.Header className={`bg-info`} />
       <Card.Body>
@@ -141,10 +156,12 @@ const Event: FunctionComponent<Props> = ({
           Join
         </Card.Link>
         <Card.Link href={``} onClick={handleShowParticipiants}>
-          0 participiants
+          {users.length} participiants
         </Card.Link>
       </Card.Footer>
     </Card>
+    <EventUsers show={showUsers} onHide={() => setShowUsers(false)} users={users}/>
+    </>
   );
 };
 export default Event;
