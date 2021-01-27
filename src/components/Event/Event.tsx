@@ -90,77 +90,77 @@ const Event: FunctionComponent<Props> = ({
   };
   return (
     <>
-    <Card className={`mt-3`}>
-      <Card.Header className={`bg-info`} />
-      <Card.Body>
-        <Card.Title className={`d-flex justify-content-between`}>
-          <span>
-            {!isEditing ? (
-              title
-            ) : (
-              <Form.Control type="text" value={titleEdit} onChange={(e) => setTitleEdit(e.target.value)} />
-            )}
-          </span>
-          <div className="flex-column">
-            <Card.Subtitle className={`text-right mb-3`}>
-              {user?.idAccount === idCreator && !isEditing && (
-                <span className={`btn`}>
-                  <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />{" "}
-                </span>
+      <Card className={`mt-3`}>
+        <Card.Header className={`bg-info`} />
+        <Card.Body>
+          <Card.Title className={`d-flex justify-content-between`}>
+            <span>
+              {!isEditing ? (
+                title
+              ) : (
+                <Form.Control type="text" value={titleEdit} onChange={(e) => setTitleEdit(e.target.value)} />
               )}
-              {user?.idAccount === idCreator && isEditing && (
-                <div className={`d-flex justify-content-end`}>
-                  <Button variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
-                    Delete
-                  </Button>
-                  <Button variant="warning" className="mr-2" onClick={handleCancelEditClick}>
-                    Cancel
-                  </Button>
-                  <Button variant="primary" onClick={handleSaveEditClick}>
-                    Save
-                  </Button>
-                </div>
+            </span>
+            <div className="flex-column">
+              <Card.Subtitle className={`text-right mb-3`}>
+                {user?.idAccount === idCreator && !isEditing && (
+                  <span className={`btn`}>
+                    <AiOutlineEdit onClick={() => setIsEditing(!isEditing)} />{" "}
+                  </span>
+                )}
+                {user?.idAccount === idCreator && isEditing && (
+                  <div className={`d-flex justify-content-end`}>
+                    <Button variant="danger" className="mr-2" onClick={handleDeleteEditClick}>
+                      Delete
+                    </Button>
+                    <Button variant="warning" className="mr-2" onClick={handleCancelEditClick}>
+                      Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleSaveEditClick}>
+                      Save
+                    </Button>
+                  </div>
+                )}
+              </Card.Subtitle>
+              {!isEditing && (
+                <>
+                  <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
+                  <Card.Subtitle className={`text-muted text-right`}>
+                    <u>{new Date(eventDate).toLocaleDateString()}</u>
+                  </Card.Subtitle>
+                </>
               )}
-            </Card.Subtitle>
-            {!isEditing && (
-              <>
-                <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
-                <Card.Subtitle className={`text-muted text-right`}>
-                  <u>{new Date(eventDate).toLocaleDateString()}</u>
-                </Card.Subtitle>
-              </>
-            )}
-          </div>
-        </Card.Title>
-        {isEditing && (
-          <Card.Text>
-            <input defaultValue={eventDate} ref={inputEventDate} className="form-control w-25" required type="date" />
-          </Card.Text>
-        )}
-
-        <Card.Text>
-          {!isEditing ? (
-            description
-          ) : (
-            <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
+            </div>
+          </Card.Title>
+          {isEditing && (
+            <Card.Text>
+              <input defaultValue={eventDate} ref={inputEventDate} className="form-control w-25" required type="date" />
+            </Card.Text>
           )}
-        </Card.Text>
-        <Card.Subtitle className={`text-muted text-right`}>
-          {new Date(creationDate).toLocaleDateString()}
-          <br />
-          {new Date(creationDate).toLocaleTimeString()}
-        </Card.Subtitle>
-      </Card.Body>
-      <Card.Footer className={`d-flex justify-content-between`}>
-        <Card.Link href={``} onClick={handleJoinClick}>
-          Join
-        </Card.Link>
-        <Card.Link href={``} onClick={handleShowParticipiants}>
-          {users.length} participiants
-        </Card.Link>
-      </Card.Footer>
-    </Card>
-    <EventUsers show={showUsers} onHide={() => setShowUsers(false)} users={users}/>
+
+          <Card.Text>
+            {!isEditing ? (
+              description
+            ) : (
+              <Form.Control type="text" value={descriptionEdit} onChange={(e) => setDescriptionEdit(e.target.value)} />
+            )}
+          </Card.Text>
+          <Card.Subtitle className={`text-muted text-right`}>
+            {new Date(creationDate).toLocaleDateString()}
+            <br />
+            {new Date(creationDate).toLocaleTimeString()}
+          </Card.Subtitle>
+        </Card.Body>
+        <Card.Footer className={`d-flex justify-content-between`}>
+          <Card.Link href={``} onClick={handleJoinClick}>
+            Join
+          </Card.Link>
+          <Card.Link href={``} onClick={handleShowParticipiants}>
+            {users.length} participants
+          </Card.Link>
+        </Card.Footer>
+      </Card>
+      <EventUsers show={showUsers} onHide={() => setShowUsers(false)} users={users} />
     </>
   );
 };
