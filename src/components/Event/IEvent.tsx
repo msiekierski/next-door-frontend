@@ -1,3 +1,5 @@
+import IEventUser from "./IEventUser";
+
 interface IEvent {
   idEvent: number;
   type: "event";
@@ -7,6 +9,7 @@ interface IEvent {
   creationDate: string;
   eventDate: string;
   idAssoc: number;
+  users: Array<IEventUser>;
 }
 
 export default IEvent;

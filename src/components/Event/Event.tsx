@@ -10,7 +10,7 @@ import oracleDateToInputDate from "../../utils/DateConverter";
 import { EVENT_TYPE } from "../../constants/constants";
 import { getUser } from "../../API/login";
 import IEventUser from "./IEventUser";
-import EventUsers from "./Users/EventUsers"
+import EventUsers from "./Users/EventUsers";
 
 export type Props = IEvent & {
   removeFeed: Function;
@@ -26,23 +26,17 @@ const Event: FunctionComponent<Props> = ({
   eventDate,
   removeFeed,
   updateFeed,
+  users,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
   const [descriptionEdit, setDescriptionEdit] = useState(description);
   const user = useContext(UserContext);
   const inputEventDate = useRef<HTMLInputElement>(null);
-  const [users, setUsers] = useState<Array<IEventUser>>([]);
   const [showUsers, setShowUsers] = useState(false);
 
-  useEffect(() => {
-    const fetch = async () => {
-      const eventUsers = await getUsers(idEvent);
-      setUsers(eventUsers);
-    };
-    fetch();
-  }, []);
-
+  console.log("events in users")
+  console.log(users)
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
   };
@@ -156,7 +150,7 @@ const Event: FunctionComponent<Props> = ({
             Join
           </Card.Link>
           <Card.Link href={``} onClick={handleShowParticipiants}>
-            {users.length} participants
+            {users && users.length}participants
           </Card.Link>
         </Card.Footer>
       </Card>

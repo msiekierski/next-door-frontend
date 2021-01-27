@@ -8,7 +8,7 @@ import { Card } from "react-bootstrap";
 import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
-import { getAllEvents } from "../../API/events";
+import { getAllEvents, getUsers } from "../../API/events";
 import { ANNOUNCEMENT_TYPE, ANNOUNCEMENT_TYPE_COMMUNAL, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
 import EventCreator from "../Event/Creator/EventCreator";
 
@@ -36,7 +36,8 @@ const Community = () => {
     };
     fetchData();
   }, []);
-
+  console.log("feed");
+  console.log(feed);
   //announcement functions
   const feedCallbacks = {
     createFeed: (announcement: IAnnouncement | IEvent) => {
@@ -68,6 +69,8 @@ const Community = () => {
       return <Announcement key={index} {...feedElement} {...feedCallbacks} />;
     }
     if (feedElement.type == EVENT_TYPE) {
+      console.log("in return");
+      console.log(feedElement.users);
       return <Event key={index} {...feedElement} {...feedCallbacks} />;
     }
   };

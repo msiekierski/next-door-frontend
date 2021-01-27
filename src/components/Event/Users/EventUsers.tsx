@@ -17,7 +17,7 @@ const EventUsers: FunctionComponent<Props> = ({users, show, onHide}) => {
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
-            {users.map((user) => {
+            {users && users.map((user) => {
               return (
                 <ListGroup.Item key={user.idAccount}>
                   {user.name} {user.surname}
