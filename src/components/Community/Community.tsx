@@ -12,14 +12,19 @@ import { addUser, deleteUser, getAllEvents, getUsers } from "../../API/events";
 import { ANNOUNCEMENT_TYPE, ANNOUNCEMENT_TYPE_COMMUNAL, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
 import EventCreator from "../Event/Creator/EventCreator";
 import IEventUser from "../Event/IEventUser";
+import { getAllAdvertisementsEstate } from "../../API/advertisement";
+import IAdvertisement from "../Advertisements/Advertisement/IAdvertisement";
+import Advertisement from "../Advertisements/Advertisement/Advertisement";
 
 const Community = () => {
+  const [seconds, setSeconds] = useState(0);
   //login
   const user = useContext(UserContext);
   //general list
   const [feed, setFeed] = useState<Array<IAnnouncement | IEvent>>([]);
   const [filter, setFilter] = useState("");
 
+  const [ads, setAds] = useState<Array<IAdvertisement>>([]);
   //togglers
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
@@ -29,7 +34,9 @@ const Community = () => {
     const fetchData = async () => {
       const announcements = await getAllAnnouncements(user?.idAssoc);
       const events = await getAllEvents(user?.idAssoc);
-      //add types
+      const ads = await getAllAdvertisementsEstate(user?.idAssoc);
+      setAds(ads);
+      console.log(ads);
       const communalAnnouncements = announcements.filter((e) => e.announcementType == ANNOUNCEMENT_TYPE_COMMUNAL);
       communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));
       events.forEach((e) => (e.type = EVENT_TYPE));
@@ -37,6 +44,7 @@ const Community = () => {
     };
     fetchData();
   }, []);
+
   //announcement functions
   const feedCallbacks = {
     createFeed: (announcement: IAnnouncement | IEvent) => {
@@ -156,6 +164,7 @@ const Community = () => {
       {isCreatingEvent && (
         <EventCreator hideEventCreator={() => setIsCreatingEvent(false)} createFeed={feedCallbacks.createFeed} />
       )}
+      {ads.length ? <Advertisement {...ads[Math.floor(Math.random() * ads.length)]} /> : null}
       {feed && feed.length ? feed.sort(sortByDate).filter(filterByPhrase).map(generateFeedComponent) : "Loading..."}
     </div>
   );

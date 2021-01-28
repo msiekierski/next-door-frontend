@@ -5,7 +5,7 @@ import IAdvertisement from "./IAdvertisement";
 import { UserContext } from "../../Login/UserContext";
 import { deleteAdvertisement, putAdvertisement } from "../../../API/advertisement";
 
-type Props = IAdvertisement & { status: number };
+type Props = IAdvertisement;
 
 const Advertisement: FunctionComponent<Props> = ({
   idAd,
@@ -30,7 +30,7 @@ const Advertisement: FunctionComponent<Props> = ({
   const handleSaveEditClick = async (e: MouseEvent) => {
     e.preventDefault();
     await putAdvertisement(idAd, titleEdit, descriptionEdit);
-    updateAdvertisement(idAd, titleEdit, descriptionEdit);
+    if (updateAdvertisement) updateAdvertisement(idAd, titleEdit, descriptionEdit);
     clearEdit();
     setIsEditing(false);
   };
@@ -43,7 +43,7 @@ const Advertisement: FunctionComponent<Props> = ({
   const handleDeleteEditClick = async (e: MouseEvent) => {
     e.preventDefault();
     await deleteAdvertisement(idAd);
-    removeAdvertisement(idAd);
+    if (removeAdvertisement) removeAdvertisement(idAd);
   };
 
   return (

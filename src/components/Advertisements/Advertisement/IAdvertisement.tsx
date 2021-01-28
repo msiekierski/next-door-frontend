@@ -4,8 +4,10 @@ interface IAdvertisement {
   title: string;
   description: string;
   price: number;
-  updateAdvertisement: Function;
-  removeAdvertisement: Function;
+  status?: number;
+  updateAdvertisement?: Function;
+  removeAdvertisement?: Function;
+  housingAssocList?: number[];
 }
 
 export default IAdvertisement;

@@ -21,6 +21,8 @@ const Reply: FunctionComponent<Props> = ({ commentAdd, idAnnouncement }) => {
     console.log(idAnnouncement);
     let desc = content && content.current ? content.current.value : "";
     const newComment: IComment = {
+      name: user ? user.name : "",
+      surname: user ? user.surname : "",
       creationDate: new Date().toDateString() + " " + new Date().toLocaleTimeString(),
       description: desc,
       idAccount: user?.idAccount,

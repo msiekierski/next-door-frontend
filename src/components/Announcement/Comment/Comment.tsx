@@ -4,14 +4,16 @@ import IComment from "./IComment";
 
 type Props = IComment;
 
-const Comment: FunctionComponent<Props> = ({ description, creationDate }) => {
+const Comment: FunctionComponent<Props> = ({ description, creationDate, name, surname }) => {
   useEffect(() => {}, []);
 
   return (
     <Card>
       <Card.Body>
         <Card.Title className={`d-flex justify-content-between`}>
-          <Card.Subtitle className={`text-muted`}>Author</Card.Subtitle>
+          <Card.Subtitle className={`text-muted`}>
+            {name} {surname}
+          </Card.Subtitle>
           <Card.Subtitle className={`text-muted text-right`}>
             {new Date(creationDate).toLocaleDateString()}
             <br />

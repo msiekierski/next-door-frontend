@@ -28,8 +28,6 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
       replays: [],
       author: "",
     };
-    console.log(newAnnouncement);
-    //
     newAnnouncement.idAnnouncement = await createAnnouncement(newAnnouncement);
     createFeed(newAnnouncement);
     hideAnnouncementCreator();

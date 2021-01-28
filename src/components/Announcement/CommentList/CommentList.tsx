@@ -21,6 +21,8 @@ const CommentList: FunctionComponent<Props> = ({ comments }) => {
             idAnnouncement={comment.idAnnouncement}
             creationDate={comment.creationDate}
             description={comment.description}
+            name={comment.name}
+            surname={comment.surname}
           />
         ))}
     </ListGroup>

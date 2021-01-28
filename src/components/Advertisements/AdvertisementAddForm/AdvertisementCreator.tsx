@@ -1,32 +1,40 @@
-import React, { FunctionComponent, useRef, FormEvent, useContext, useState, RefObject } from "react";
-import { Card, Button, Container } from "react-bootstrap";
+import React, { FunctionComponent, useRef, FormEvent, useContext, useState } from "react";
+import { Card, Button, Alert } from "react-bootstrap";
 import IAdvertisementCreator from "./IAdvertisementCreator";
 import { UserContext } from "../../Login/UserContext";
-import { createAdvertisement } from "../../../API/advertisement";
-import { ADVERT_BOTTOM_PAYMENT, ANNOUNCEMENT_TYPE_COMMUNAL } from "../../../constants/constants";
 import { IUser } from "../../Login/IUser";
-import DateToOracleDate from "../../../utils/DateConverter";
 import HousingAssocList from "./HousingAssocList/HousingAssocList";
-import { createAnnouncement } from "../../../API/announcements";
 import IAdvertisement from "../Advertisement/IAdvertisement";
+import { createAdvertisement } from "../../../API/advertisement";
 
 export type Props = IAdvertisementCreator;
 
 const AdvertisementCreator: FunctionComponent<Props> = ({ hideAdvertisementCreator, addNewAdvertisement }) => {
+  const [charge, setCharge] = useState(0);
+  const [checked, setChecked] = useState<Array<number>>([]);
+  const [isValid, setIsValid] = useState(true);
   const inputTopic = useRef<HTMLInputElement>(null);
   const inputDesc = useRef<HTMLTextAreaElement>(null);
-  const [charge, setCharge] = useState(ADVERT_BOTTOM_PAYMENT);
   const user = useContext<IUser | null>(UserContext);
 
   async function submitAdvert(e: FormEvent) {
     e.preventDefault();
-    // const newAdvert: IAdvertisement = {
-    //   idAccount: user?.idAccount,
-    //   title: inputTopic?.current?.value,
-    //   description: inputDesc?.current?.value,
-    //   price: charge,
-    //   status: 0,
-    // };
+    if (checked.length == 0) {
+      setIsValid(false);
+      return;
+    }
+    const newAdvert: IAdvertisement = {
+      description: inputDesc?.current?.value ? inputDesc.current.value : "",
+      idAccount: user?.idAccount ? user.idAccount : 0,
+      idAd: 0,
+      status: 1,
+      price: charge,
+      title: inputTopic?.current?.value ? inputTopic.current.value : "",
+      housingAssocList: checked,
+    };
+    newAdvert.idAd = await createAdvertisement(newAdvert);
+    addNewAdvertisement(newAdvert);
+    hideAdvertisementCreator();
   }
 
   return (
@@ -40,12 +48,9 @@ const AdvertisementCreator: FunctionComponent<Props> = ({ hideAdvertisementCreat
                 <Button variant="secondary" className="mr-2" onClick={(e) => hideAdvertisementCreator(e)}>
                   Cancel
                 </Button>
-                <button type="submit" className="btn btn-primary mr-2">
+                <Button type="submit" className="btn-primary">
                   Submit
-                </button>
-                <button type="submit" className="btn btn-warning">
-                  Submit and pay
-                </button>
+                </Button>
               </div>
             </div>
             <div className={`d-flex space-between`}>
@@ -72,7 +77,8 @@ const AdvertisementCreator: FunctionComponent<Props> = ({ hideAdvertisementCreat
           </div>
         </form>
       </Card.Body>
-      <HousingAssocList setCharge={setCharge} />
+      {!isValid && <Alert variant={`danger`}>You have to check at least one housing association.</Alert>}
+      <HousingAssocList setChecked={setChecked} setCharge={setCharge} setIsValid={setIsValid} />
     </Card>
   );
 };

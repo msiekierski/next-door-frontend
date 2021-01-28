@@ -8,7 +8,19 @@ export async function getAllAdvertisements(idAccount?: number) {
       `http://localhost:8080/nexDoor/get/ads/advert/${idAccount}`,
       {}
     );
-    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+}
+
+export async function getAllAdvertisementsEstate(idEstate?: number) {
+  try {
+    const { data } = await axios.get<Array<IAdvertisement>>(
+      `http://localhost:8080/nexDoor/get/ads/estate/${idEstate}`,
+      {}
+    );
     return data;
   } catch (e) {
     console.log(e);
@@ -22,7 +34,7 @@ export async function putAdvertisement(adId: number, title: string, description:
       title,
       description,
     });
-    console.log(response);
+    return response.data;
   } catch (e) {
     console.log(e);
   }
@@ -39,10 +51,11 @@ export async function deleteAdvertisement(adId: number) {
 
 export async function createAdvertisement(newAdvert: IAdvertisement) {
   try {
-    const response = await axios.post(`http://localhost:8080/nexDoor/create/announcement`, {
+    const response = await axios.post(`http://localhost:8080/nexDoor/create/ad`, {
       ...newAdvert,
     });
-    return 5;
+    console.log(response);
+    return response.data;
   } catch (e) {
     console.log(e);
     return false;
