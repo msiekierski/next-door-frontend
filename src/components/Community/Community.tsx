@@ -8,7 +8,7 @@ import { Card } from "react-bootstrap";
 import AnnouncementCreator from "../Announcement/Creator/AnnouncementCreator";
 import Event from "../Event/Event";
 import IEvent from "../Event/IEvent";
-import { addUser, getAllEvents, getUsers } from "../../API/events";
+import { addUser, deleteUser, getAllEvents, getUsers } from "../../API/events";
 import { ANNOUNCEMENT_TYPE, ANNOUNCEMENT_TYPE_COMMUNAL, EVENT_TYPE, SEARCH_COMMUNITY } from "../../constants/constants";
 import EventCreator from "../Event/Creator/EventCreator";
 import IEventUser from "../Event/IEventUser";
@@ -63,23 +63,45 @@ const Community = () => {
     },
   };
 
-  const joinUserToEvent = async(idEvent: number) => {
-    if (feed.find((element) => element.type===EVENT_TYPE && (element.users.find((u) => u.idAccount === user?.idAccount) === undefined))) {
-    await addUser(idEvent, user?.idAccount!);
-    const newFeed =  feed.map((element) => {
-      if (element.type === EVENT_TYPE && element.idEvent == idEvent) {
-        const newUser: IEventUser = {
-          idAccount: user?.idAccount,
-          name: user?.name,
-          surname: user?.surname,
-        };
-        element.users = [newUser, ...element.users];
-      }
-      return element;
-    });
-    setFeed(newFeed);
+  const joinUserToEvent = async (idEvent: number) => {
+    if (
+      feed.find(
+        (element) =>
+          element.type === EVENT_TYPE && element.users.find((u) => u.idAccount === user?.idAccount) === undefined
+      )
+    ) {
+      await addUser(idEvent, user?.idAccount!);
+      const newFeed = feed.map((element) => {
+        if (element.type === EVENT_TYPE && element.idEvent == idEvent) {
+          const newUser: IEventUser = {
+            idAccount: user?.idAccount,
+            name: user?.name,
+            surname: user?.surname,
+          };
+          element.users = [newUser, ...element.users];
+        }
+        return element;
+      });
+      setFeed(newFeed);
     }
-    
+  };
+
+  const deleteUserFromEvent = async (idEvent: number) => {
+    if (
+      feed.find(
+        (element) =>
+          element.type === EVENT_TYPE && element.users.find((u) => u.idAccount === user?.idAccount) !== undefined
+      )
+    ) {
+      await deleteUser(idEvent, user?.idAccount!);
+      const newFeed = feed.map((element) => {
+        if (element.type === EVENT_TYPE && element.idEvent == idEvent) {
+          element.users = element.users.filter((u) => u.idAccount !== user?.idAccount);
+        }
+        return element;
+      });
+      setFeed(newFeed);
+    }
   };
 
   const generateFeedComponent = (feedElement: IAnnouncement | IEvent, index: number) => {
@@ -87,9 +109,15 @@ const Community = () => {
       return <Announcement key={index} {...feedElement} {...feedCallbacks} />;
     }
     if (feedElement.type == EVENT_TYPE) {
-      console.log("in return");
-      console.log(feedElement.users);
-      return <Event key={index} {...feedElement} {...feedCallbacks} joinUser={joinUserToEvent} />;
+      return (
+        <Event
+          key={index}
+          {...feedElement}
+          {...feedCallbacks}
+          joinUser={joinUserToEvent}
+          deleteUser={deleteUserFromEvent}
+        />
+      );
     }
   };
 

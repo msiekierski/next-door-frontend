@@ -11,7 +11,6 @@ export async function putEvent(idEvent: number, title: string, desc: string, eve
 export async function getAllEvents(idAssoc?: number): Promise<Array<IEvent>> {
   try {
     let { data } = await axios.get(`http://localhost:8080/nexDoor/get/events/${idAssoc}`, {});
-    console.log(data);
     return data;
   } catch (e) {
     console.log(e);
@@ -48,5 +47,11 @@ export async function getUsers(idEvent: number):Promise<Array<IEventUser>> {
 export async function addUser(idEvent: number, idUser: number) {
   try {
     const request = await axios.post(`http://localhost:8080/nexDoor/put/event/${idEvent}/user/${idUser}`)
+  } catch (e) {}
+}
+
+export async function deleteUser(idEvent: number, idUser: number) {
+  try {
+    const request = await axios.delete(`http://localhost:8080/nexDoor/delete/event/${idEvent}/user/${idUser}`)
   } catch (e) {}
 }

@@ -16,6 +16,7 @@ export type Props = IEvent & {
   removeFeed: Function;
   updateFeed: Function;
   joinUser: Function;
+  deleteUser: Function;
 };
 
 const Event: FunctionComponent<Props> = ({
@@ -28,7 +29,8 @@ const Event: FunctionComponent<Props> = ({
   removeFeed,
   updateFeed,
   users,
-  joinUser
+  joinUser,
+  deleteUser
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -45,6 +47,7 @@ const Event: FunctionComponent<Props> = ({
 
   const handleLeaveClick = (e:MouseEvent) => {
     e.preventDefault();
+    deleteUser(idEvent)
   }
 
   const handleShowParticipiants = (e: MouseEvent) => {
@@ -154,7 +157,7 @@ const Event: FunctionComponent<Props> = ({
         <Card.Footer className={`d-flex justify-content-between`}>
           {(users.find((u) => u.idAccount === user?.idAccount) === undefined)? <Card.Link href={``} onClick={handleJoinClick}>
             Join
-          </Card.Link>: <Card.Link href={``} onClick={handleLeaveClick}>
+          </Card.Link>: <Card.Link className="text-danger" href={``} onClick={handleLeaveClick}>
             Leave
           </Card.Link>}
           
