@@ -8,7 +8,6 @@ import IComment from "../components/Announcement/Comment/IComment";
 export async function getAllAnnouncements(idAssoc?: number): Promise<Array<IAnnouncement>> {
   try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/announcement/${idAssoc}`, {});
-    console.log(data);
     return data;
   } catch (e) {
     return [];

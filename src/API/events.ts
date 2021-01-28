@@ -10,14 +10,8 @@ export async function putEvent(idEvent: number, title: string, desc: string, eve
 
 export async function getAllEvents(idAssoc?: number): Promise<Array<IEvent>> {
   try {
-    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/events/${idAssoc}`, {});
+    let { data } = await axios.get(`http://localhost:8080/nexDoor/get/events/${idAssoc}`, {});
     console.log(data);
-    await data.map(async (event: IEvent) => {
-      const users:Array<IEventUser> = await getUsers(event.idEvent)
-      event.users = [...users]
-    })
-    console.log("api data")
-    console.log(data)
     return data;
   } catch (e) {
     console.log(e);

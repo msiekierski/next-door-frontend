@@ -150,7 +150,7 @@ const Event: FunctionComponent<Props> = ({
             Join
           </Card.Link>
           <Card.Link href={``} onClick={handleShowParticipiants}>
-            {users && users.length}participants
+            {users.length} participants
           </Card.Link>
         </Card.Footer>
       </Card>
