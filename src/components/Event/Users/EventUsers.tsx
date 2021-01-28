@@ -11,7 +11,7 @@ interface Props {
 
 const EventUsers: FunctionComponent<Props> = ({users, show, onHide}) => {
     return (
-      <Modal size="lg" show={show} onHide={onHide} aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal animation={false} size="lg" show={show} onHide={onHide} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Participants</Modal.Title>
         </Modal.Header>

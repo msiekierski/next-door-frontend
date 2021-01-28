@@ -44,3 +44,9 @@ export async function getUsers(idEvent: number):Promise<Array<IEventUser>> {
     return data;
   } catch (e) {return []}
 }
+
+export async function addUser(idEvent: number, idUser: number) {
+  try {
+    const request = await axios.post(`http://localhost:8080/nexDoor/put/event/${idEvent}/user/${idUser}`)
+  } catch (e) {}
+}

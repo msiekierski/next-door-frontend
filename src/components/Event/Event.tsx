@@ -15,6 +15,7 @@ import EventUsers from "./Users/EventUsers";
 export type Props = IEvent & {
   removeFeed: Function;
   updateFeed: Function;
+  joinUser: Function;
 };
 
 const Event: FunctionComponent<Props> = ({
@@ -27,6 +28,7 @@ const Event: FunctionComponent<Props> = ({
   removeFeed,
   updateFeed,
   users,
+  joinUser
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -35,11 +37,15 @@ const Event: FunctionComponent<Props> = ({
   const inputEventDate = useRef<HTMLInputElement>(null);
   const [showUsers, setShowUsers] = useState(false);
 
-  console.log("events in users")
-  console.log(users)
+
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
+    joinUser(idEvent)
   };
+
+  const handleLeaveClick = (e:MouseEvent) => {
+    e.preventDefault();
+  }
 
   const handleShowParticipiants = (e: MouseEvent) => {
     e.preventDefault();
@@ -146,9 +152,12 @@ const Event: FunctionComponent<Props> = ({
           </Card.Subtitle>
         </Card.Body>
         <Card.Footer className={`d-flex justify-content-between`}>
-          <Card.Link href={``} onClick={handleJoinClick}>
+          {(users.find((u) => u.idAccount === user?.idAccount) === undefined)? <Card.Link href={``} onClick={handleJoinClick}>
             Join
-          </Card.Link>
+          </Card.Link>: <Card.Link href={``} onClick={handleLeaveClick}>
+            Leave
+          </Card.Link>}
+          
           <Card.Link href={``} onClick={handleShowParticipiants}>
             {users.length} participants
           </Card.Link>
