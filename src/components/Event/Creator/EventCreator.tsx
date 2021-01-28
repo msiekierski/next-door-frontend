@@ -6,7 +6,7 @@ import { IUser } from "../../Login/IUser";
 import DateToOracleDate from "../../../utils/DateConverter";
 import IEventCreator from "./IEventCreator";
 import IEvent from "../IEvent";
-import { createEvent } from "../../../API/events";
+import { addUser, createEvent } from "../../../API/events";
 import { EVENT_TYPE } from "../../../constants/constants";
 import IEventUser from "../IEventUser";
 
@@ -20,11 +20,11 @@ const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, createFeed }
 
   const submitEvent = async (e: FormEvent) => {
     e.preventDefault();
-    const newUser:IEventUser = {
+    const newUser: IEventUser = {
       idAccount: user?.idAccount,
       name: user?.name,
-      surname: user?.surname
-    }
+      surname: user?.surname,
+    };
     const newEvent: IEvent = {
       idAssoc: user?.idAssoc ? user.idAssoc : 0,
       creationDate: new Date().toDateString() + " " + new Date().toLocaleTimeString(),
@@ -34,10 +34,11 @@ const EventCreator: FunctionComponent<Props> = ({ hideEventCreator, createFeed }
       type: "event",
       idEvent: 0,
       eventDate: inputEventDate?.current?.value ? inputEventDate.current.value : "",
-      users: [newUser]
+      users: [newUser],
     };
     //
     newEvent.idEvent = await createEvent(newEvent);
+    await addUser(newEvent.idEvent, user?.idAccount!);
     createFeed(newEvent);
     hideEventCreator();
   };
