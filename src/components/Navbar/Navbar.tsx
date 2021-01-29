@@ -37,9 +37,18 @@ const Navigation = () => {
           <Link to="/settings">
             <Dropdown.Item as="button">Settings</Dropdown.Item>
           </Link>
-          <Dropdown.Item onClick={(e) => {setUser(null); localStorage.removeItem("user"); localStorage.removeItem("login")}} as="button">
-            Log Out
-          </Dropdown.Item>
+          <Link to="/">
+            <Dropdown.Item
+              onClick={(e) => {
+                setUser(null);
+                localStorage.removeItem("user");
+                localStorage.removeItem("login");
+              }}
+              as="button"
+            >
+              Log Out
+            </Dropdown.Item>
+          </Link>
         </Dropdown.Menu>
       </Dropdown>
     </Navbar>
