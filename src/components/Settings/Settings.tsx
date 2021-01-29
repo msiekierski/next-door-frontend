@@ -13,7 +13,9 @@ useEffect(() => {}, [user])
 
   return (
     <Card className="mt-3">
-      <Card.Title className="text-center mb-2 mt-2">Account Settings</Card.Title>
+      <Card.Title className="text-center mb-1 mt-2">
+        <h2>Account Settings</h2>
+      </Card.Title>
       {!isChangingNick && !isChangingPass && (
         <Card.Body>
           <div className="d-flex justify-content-between">
@@ -44,8 +46,8 @@ useEffect(() => {}, [user])
           </div>
         </Card.Body>
       )}
-      {isChangingNick && <SettingsAccountNickname closeNicknameChange={() => setIsChangingNick(false)}/>}
-      {isChangingPass && <SettingsAccountPassword closePasswordChange={() => setIsChangingPass(false)}/>}
+      {isChangingNick && <SettingsAccountNickname closeNicknameChange={() => setIsChangingNick(false)} />}
+      {isChangingPass && <SettingsAccountPassword closePasswordChange={() => setIsChangingPass(false)} />}
     </Card>
   );
 };

@@ -26,16 +26,13 @@ const SettingsAccountNickname: FunctionComponent<Props> = ({ closeNicknameChange
 
   return (
     <Card.Body>
+      <Card.Title className="text-center mb-3">
+        <h4>Change your login</h4>
+      </Card.Title>
       <Form onSubmit={handleSubmit}>
         <Form.Row className="form-row align-items-center d-flex justify-content-center">
-          <Form.Label className="mr-2">New Nickname</Form.Label>
-          <Form.Control
-            required
-            ref={nicknameRef}
-            className="w-25 mr-2"
-            type="text"
-            placeholder={user?.login}
-          />
+          <Form.Label className="mr-2">New Login</Form.Label>
+          <Form.Control required ref={nicknameRef} className="w-25 mr-2" type="text" placeholder={user?.login} />
           <Button className="mr-1" variant="warning" onClick={() => closeNicknameChange()}>
             Cancel
           </Button>
