@@ -91,7 +91,7 @@ const Advertisement: FunctionComponent<Props> = ({
         {status == 0 ? (
           <Button variant={"warning"}>Activate and pay</Button>
         ) : (
-          <Card.Subtitle className={`text-success`}>Active</Card.Subtitle>
+          <Card.Subtitle className={`text-success`}></Card.Subtitle>
         )}
       </Card.Body>
     </Card>

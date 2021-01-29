@@ -26,7 +26,8 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
       type: "announcement",
       idAnnouncement: 0,
       replays: [],
-      author: "",
+      name: "",
+      surname: "",
     };
     newAnnouncement.idAnnouncement = await createAnnouncement(newAnnouncement);
     createFeed(newAnnouncement);

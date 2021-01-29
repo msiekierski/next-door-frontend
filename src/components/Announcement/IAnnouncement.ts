@@ -9,7 +9,8 @@ interface IAnnouncement {
   title: string;
   description: string;
   creationDate: string;
-  author: string;
+  name: string;
+  surname: string;
   replays: Array<IComment>;
 }
 

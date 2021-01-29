@@ -2,7 +2,6 @@ import React, { FunctionComponent, MouseEvent, useContext, useState } from "reac
 import { Card, Button, Form } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import IAnnouncement from "./IAnnouncement";
-import { IUser } from "../Login/IUser";
 import { deleteAnnouncement, putAnnouncement } from "../../API/announcements";
 import CommentList from "./CommentList/CommentList";
 import Reply from "./Reply/Reply";
@@ -22,7 +21,8 @@ const Announcement: FunctionComponent<Props> = ({
   title,
   description,
   creationDate,
-  author,
+  name,
+  surname,
   replays,
   removeFeed,
   updateFeed,
@@ -111,7 +111,9 @@ const Announcement: FunctionComponent<Props> = ({
                 </div>
               )}
             </Card.Subtitle>
-            <Card.Subtitle className={`text-muted text-right`}>{author}</Card.Subtitle>
+            <Card.Subtitle className={`text-muted text-right`}>
+              {name} {surname}
+            </Card.Subtitle>
           </div>
         </Card.Title>
         <Card.Text>
