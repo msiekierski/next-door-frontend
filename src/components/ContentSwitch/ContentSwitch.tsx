@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import Community from "../Community/Community";
 import Administration from "../Administration/Administration";
 import AdvertisementsPage from "../Advertisements/AdvertisementsPage/AdvertisementsPage";
+import Settings from "../Settings/Settings";
 
 interface OwnProps {}
 
@@ -21,6 +22,9 @@ const ContentSwitch: FunctionComponent<Props> = (props) => {
         </Route>
         <Route path="/advertisements">
           <AdvertisementsPage />
+        </Route>
+        <Route path="/settings">
+          <Settings />
         </Route>
       </Switch>
     </Container>
