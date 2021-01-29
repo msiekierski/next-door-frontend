@@ -41,8 +41,13 @@ const Announcement: FunctionComponent<Props> = ({
 
   const handleReplyClick = (e: MouseEvent) => {
     e.preventDefault();
-    setReply(!reply);
-    setShowComments(true);
+    if (!reply) {
+      setReply(true);
+      setShowComments(true);
+    } else {
+      setReply(false);
+      setShowComments(false);
+    }
   };
 
   const handleShowRepliesClick = (e: MouseEvent) => {

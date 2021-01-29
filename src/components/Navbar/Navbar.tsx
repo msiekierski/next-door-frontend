@@ -31,7 +31,7 @@ const Navigation = () => {
       <Navbar.Brand href="/">NexDoor</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">{Nav()}</Navbar.Collapse>
-      <Dropdown>
+      <Dropdown className={`btn`}>
         <Dropdown.Toggle style={{ fontSize: "2.5em" }} as={FaUserCircle} variant="success" id="dropdown-item-basic" />
         <Dropdown.Menu align="right" className="mt-2">
           <Link to="/settings">

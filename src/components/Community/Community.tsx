@@ -29,12 +29,15 @@ const Community = () => {
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
 
+  const [currAd, setCurrAd] = useState(0);
+
   //fetch all data
   useEffect(() => {
     const fetchData = async () => {
       const announcements = await getAllAnnouncements(user?.idAssoc);
       const events = await getAllEvents(user?.idAssoc);
       const ads = await getAllAdvertisementsEstate(user?.idAssoc);
+      setCurrAd(Math.floor(Math.random() * ads.length));
       setAds(ads);
       console.log(ads);
       const communalAnnouncements = announcements.filter((e) => e.announcementType == ANNOUNCEMENT_TYPE_COMMUNAL);
@@ -50,7 +53,7 @@ const Community = () => {
     createFeed: (announcement: IAnnouncement | IEvent) => {
       setFeed((feed) => [announcement, ...feed]);
     },
-    updateFeed: (type: string, id: number, titleEdit: string, descriptionEdit: string, date:string) => {
+    updateFeed: (type: string, id: number, titleEdit: string, descriptionEdit: string, date: string) => {
       let index;
       if (type == ANNOUNCEMENT_TYPE) {
         index = feed.findIndex((e) => e.type == ANNOUNCEMENT_TYPE && e.idAnnouncement == id);
@@ -168,7 +171,7 @@ const Community = () => {
       {isCreatingEvent && (
         <EventCreator hideEventCreator={() => setIsCreatingEvent(false)} createFeed={feedCallbacks.createFeed} />
       )}
-      {ads.length ? <Advertisement {...ads[Math.floor(Math.random() * ads.length)]} /> : null}
+      {ads.length ? <Advertisement {...ads[currAd]} /> : null}
       {feed && feed.length ? feed.sort(sortByDate).filter(filterByPhrase).map(generateFeedComponent) : "Loading..."}
     </div>
   );

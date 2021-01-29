@@ -9,6 +9,8 @@ interface IEvent {
   creationDate: string;
   eventDate: string;
   idAssoc: number;
+  creatorName?: string;
+  creatorSurname?: string;
   users: Array<IEventUser>;
 }
 

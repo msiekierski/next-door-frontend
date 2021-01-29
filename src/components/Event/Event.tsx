@@ -30,7 +30,9 @@ const Event: FunctionComponent<Props> = ({
   updateFeed,
   users,
   joinUser,
-  deleteUser
+  deleteUser,
+  creatorName,
+  creatorSurname,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(title);
@@ -39,16 +41,15 @@ const Event: FunctionComponent<Props> = ({
   const inputEventDate = useRef<HTMLInputElement>(null);
   const [showUsers, setShowUsers] = useState(false);
 
-
   const handleJoinClick = (e: MouseEvent) => {
     e.preventDefault();
-    joinUser(idEvent)
+    joinUser(idEvent);
   };
 
-  const handleLeaveClick = (e:MouseEvent) => {
+  const handleLeaveClick = (e: MouseEvent) => {
     e.preventDefault();
-    deleteUser(idEvent)
-  }
+    deleteUser(idEvent);
+  };
 
   const handleShowParticipiants = (e: MouseEvent) => {
     e.preventDefault();
@@ -125,6 +126,12 @@ const Event: FunctionComponent<Props> = ({
                   </div>
                 )}
               </Card.Subtitle>
+              <Card.Subtitle className={`text-muted text-right`}>
+                {creatorName} {creatorSurname}
+              </Card.Subtitle>
+              <div>
+                <br />
+              </div>
               {!isEditing && (
                 <>
                   <Card.Subtitle className={`text-muted text-right mb-2`}>Takes place on:</Card.Subtitle>
@@ -155,12 +162,16 @@ const Event: FunctionComponent<Props> = ({
           </Card.Subtitle>
         </Card.Body>
         <Card.Footer className={`d-flex justify-content-between`}>
-          {(users.find((u) => u.idAccount === user?.idAccount) === undefined)? <Card.Link href={``} onClick={handleJoinClick}>
-            Join
-          </Card.Link>: <Card.Link className="text-danger" href={``} onClick={handleLeaveClick}>
-            Leave
-          </Card.Link>}
-          
+          {users.find((u) => u.idAccount === user?.idAccount) === undefined ? (
+            <Card.Link href={``} onClick={handleJoinClick}>
+              Join
+            </Card.Link>
+          ) : (
+            <Card.Link className="text-danger" href={``} onClick={handleLeaveClick}>
+              Leave
+            </Card.Link>
+          )}
+
           <Card.Link href={``} onClick={handleShowParticipiants}>
             {users.length} participants
           </Card.Link>
