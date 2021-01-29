@@ -3,7 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import LoginPage from "./components/Login/LoginPage";
-import { UserContext } from "./components/Login/UserContext";
+import { SetUserContext, UserContext } from "./components/Login/UserContext";
 import ContentSwitch from "./components/ContentSwitch/ContentSwitch";
 import Navbar from "./components/Navbar/Navbar";
 import { IUser } from "./components/Login/IUser";
@@ -22,12 +22,14 @@ function App() {
 
   if (user) {
     return (
+      <SetUserContext.Provider value={setUser}>
       <UserContext.Provider value={user}>
         <Router>
           <Navbar />
           <ContentSwitch />
         </Router>
       </UserContext.Provider>
+      </SetUserContext.Provider>
     );
   } else {
     return <LoginPage setUser={setUser} />;
