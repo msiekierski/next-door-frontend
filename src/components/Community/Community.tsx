@@ -50,7 +50,7 @@ const Community = () => {
     createFeed: (announcement: IAnnouncement | IEvent) => {
       setFeed((feed) => [announcement, ...feed]);
     },
-    updateFeed: (type: string, id: number, titleEdit: string, descriptionEdit: string) => {
+    updateFeed: (type: string, id: number, titleEdit: string, descriptionEdit: string, date:string) => {
       let index;
       if (type == ANNOUNCEMENT_TYPE) {
         index = feed.findIndex((e) => e.type == ANNOUNCEMENT_TYPE && e.idAnnouncement == id);
@@ -60,6 +60,10 @@ const Community = () => {
       const newFeed = [...feed];
       newFeed[index].title = titleEdit;
       newFeed[index].description = descriptionEdit;
+      let elem = newFeed[index];
+      if (elem.type === EVENT_TYPE) {
+        elem.eventDate = date;
+      }
       setFeed(newFeed);
     },
     removeFeed: (type: string, id: number) => {
