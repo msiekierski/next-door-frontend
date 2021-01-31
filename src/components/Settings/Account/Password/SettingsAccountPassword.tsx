@@ -37,9 +37,10 @@ const SettingsAccountPassword: FunctionComponent<Props> = ({ closePasswordChange
 
   return (
     <Card.Body>
+      <Card.Title className="text-center mb-3"><h4>Change your password</h4></Card.Title>
       <Form onSubmit={handleSubmit}>
         <Form.Row className="form-row align-items-center d-flex justify-content-center mb-2">
-          <Form.Label className="mr-2">Current Password</Form.Label>
+          <Form.Label className="mr-2 col-sm-2 col-form-label">Current Password</Form.Label>
           <Form.Control
             ref={currPassRef}
             required
@@ -48,8 +49,8 @@ const SettingsAccountPassword: FunctionComponent<Props> = ({ closePasswordChange
             placeholder="Your current password..."
           />
         </Form.Row>
-        <Form.Row className="form-row align-items-center d-flex justify-content-center  mb-2">
-          <Form.Label className="mr-2">New Password</Form.Label>
+        <Form.Row className="form-row align-items-center d-flex justify-content-center mb-2">
+          <Form.Label className="mr-2 col-sm-2 col-form-label">New Password</Form.Label>
           <Form.Control
             ref={newPassRef}
             required
@@ -59,7 +60,7 @@ const SettingsAccountPassword: FunctionComponent<Props> = ({ closePasswordChange
           />
         </Form.Row>
         <Form.Row className="form-row align-items-center d-flex justify-content-center mb-2">
-          <Form.Label className="mr-2">Repeat New Password</Form.Label>
+          <Form.Label className="mr-2 col-sm-2 col-form-label">Repeat New Password</Form.Label>
           <Form.Control
             ref={rNewPassRef}
             required
