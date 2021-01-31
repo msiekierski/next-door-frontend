@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mt-3 card"
+>
+  <div
+    className="bg-warning card-header"
+  />
+  <div
+    className="card-body"
+  >
+    <div
+      className="d-flex justify-content-between card-title h5"
+    >
+      <span>
+        Ann
+      </span>
+      <div
+        className="flex-column"
+      >
+        <div
+          className="text-right mb-3 card-subtitle h6"
+        />
+        <div
+          className="text-muted text-right card-subtitle h6"
+        >
+          John Doe
+        </div>
+      </div>
+    </div>
+    <p
+      className="card-text"
+    >
+      desc
+    </p>
+    <div
+      className="text-muted text-right card-subtitle h6"
+    >
+      2021-1-27
+      <br />
+      11:50 AM
+    </div>
+  </div>
+  <div
+    className="d-flex justify-content-between card-footer"
+  >
+    <a
+      className="card-link"
+      href=""
+      onClick={[Function]}
+    >
+      Reply
+    </a>
+    <a
+      className="card-link"
+      href=""
+      onClick={[Function]}
+    >
+      No replies yet
+    </a>
+  </div>
+</div>
+`;

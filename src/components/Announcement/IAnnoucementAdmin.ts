@@ -1,14 +1,14 @@
 import IComment from "./Comment/IComment";
 
-interface IAnnouncement {
+interface IAnnouncementAdmin {
   idAnnouncement: number;
   idAccount: number;
   announcementType: string;
   title: string;
-  description: string;
-  creationDate: Date;
+  desc: string;
+  creationDate: string;
   author: string;
   comments: Array<IComment>;
 }
 
-export default IAnnouncement;
+export default IAnnouncementAdmin;

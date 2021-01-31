@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly empty 1`] = `
+<div
+  className="list-group"
+  onKeyDown={[Function]}
+/>
+`;
+
+exports[`renders correctly with comments 1`] = `
+<div
+  className="list-group"
+  onKeyDown={[Function]}
+>
+  <div
+    className="card"
+  >
+    <div
+      className="card-body"
+    >
+      <div
+        className="d-flex justify-content-between card-title h5"
+      >
+        <div
+          className="text-muted card-subtitle h6"
+        >
+          Author
+        </div>
+        <div
+          className="text-muted text-right card-subtitle h6"
+        >
+          2021-1-27
+          <br />
+          0:00:00
+        </div>
+      </div>
+      <p
+        className="card-text"
+      >
+        Hej
+      </p>
+    </div>
+  </div>
+  <div
+    className="card"
+  >
+    <div
+      className="card-body"
+    >
+      <div
+        className="d-flex justify-content-between card-title h5"
+      >
+        <div
+          className="text-muted card-subtitle h6"
+        >
+          Author
+        </div>
+        <div
+          className="text-muted text-right card-subtitle h6"
+        >
+          2021-1-27
+          <br />
+          0:00:00
+        </div>
+      </div>
+      <p
+        className="card-text"
+      >
+        Hello
+      </p>
+    </div>
+  </div>
+  <div
+    className="card"
+  >
+    <div
+      className="card-body"
+    >
+      <div
+        className="d-flex justify-content-between card-title h5"
+      >
+        <div
+          className="text-muted card-subtitle h6"
+        >
+          Author
+        </div>
+        <div
+          className="text-muted text-right card-subtitle h6"
+        >
+          2021-1-27
+          <br />
+          0:00:00
+        </div>
+      </div>
+      <p
+        className="card-text"
+      >
+        Welcome!
+      </p>
+    </div>
+  </div>
+</div>
+`;

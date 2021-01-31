@@ -1,10 +1,17 @@
+import IEventUser from "./IEventUser";
+
 interface IEvent {
   idEvent: number;
-  idAccount: number;
+  type: "event";
+  idCreator: number;
   title: string;
   description: string;
-  creationDate: Date;
-  dateOfEvent: Date;
+  creationDate: string;
+  eventDate: string;
+  idAssoc: number;
+  creatorName?: string;
+  creatorSurname?: string;
+  users: Array<IEventUser>;
 }
 
 export default IEvent;

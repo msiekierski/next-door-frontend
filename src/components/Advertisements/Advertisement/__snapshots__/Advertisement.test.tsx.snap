@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly paid ad 1`] = `
+<div
+  className="mt-3 card"
+>
+  <div
+    className="bg-success card-header"
+  />
+  <div
+    className="card-body"
+  >
+    <div
+      className="d-flex justify-content-between mb-0 card-title h5"
+    >
+      <span>
+        Advertisement
+      </span>
+      <div
+        className="flex-column"
+      >
+        <div
+          className="text-right mb-3 card-subtitle h6"
+        />
+      </div>
+    </div>
+    <p
+      className="card-text"
+    >
+      ad desc
+    </p>
+    <div
+      className="text-success card-subtitle h6"
+    >
+      Active
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders correctly unpaid ad 1`] = `
+<div
+  className="mt-3 card"
+>
+  <div
+    className="bg-success card-header"
+  />
+  <div
+    className="card-body"
+  >
+    <div
+      className="d-flex justify-content-between mb-0 card-title h5"
+    >
+      <span>
+        Advertisement
+      </span>
+      <div
+        className="flex-column"
+      >
+        <div
+          className="text-right mb-3 card-subtitle h6"
+        />
+      </div>
+    </div>
+    <p
+      className="card-text"
+    >
+      ad desc
+    </p>
+    <button
+      className="btn btn-warning"
+      disabled={false}
+      type="button"
+    >
+      Activate and pay
+    </button>
+  </div>
+</div>
+`;
