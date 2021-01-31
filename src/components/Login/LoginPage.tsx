@@ -42,7 +42,7 @@ const LoginPage: FunctionComponent<Props> = ({ setUser }) => {
         setError("");
       } else {
         setUser(null);
-        setError("invalid");
+        setError("Invalid Credentials");
       }
     }
   }
