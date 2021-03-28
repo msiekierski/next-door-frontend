@@ -5,6 +5,7 @@ import Community from "../Community/Community";
 import Administration from "../Administration/Administration";
 import AdvertisementsPage from "../Advertisements/AdvertisementsPage/AdvertisementsPage";
 import Settings from "../Settings/Settings";
+import Chat from "../Chat/Chat";
 
 interface OwnProps {}
 
@@ -25,6 +26,9 @@ const ContentSwitch: FunctionComponent<Props> = (props) => {
         </Route>
         <Route path="/settings">
           <Settings />
+        </Route>
+        <Route path="/chat">
+          <Chat />  
         </Route>
       </Switch>
     </Container>
