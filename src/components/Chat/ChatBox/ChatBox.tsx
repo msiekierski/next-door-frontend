@@ -7,6 +7,8 @@ import IPrivateMessage from "../IPrivateMessage";
 import { GrUser } from "react-icons/gr";
 import ReactTimeAgo from "react-time-ago";
 import dateToOracleDate from "../../../utils/DateConverter";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { BallBeat } from "react-pure-loaders";
 
 export interface ChatBoxProps {
   name: string;
@@ -19,25 +21,47 @@ const ChatBox: FunctionComponent<ChatBoxProps> = ({ name, surname, idAccount, ex
   const [messages, setMessages] = useState<Array<IPrivateMessage>>([]);
   const user = useContext(UserContext);
   const [newMessage, setNewMessage] = useState("");
+  const messagesRef = useRef(messages);
+  const [hasMore, setHasMore] = useState(true);
+  messagesRef.current = messages;
 
   useEffect(() => {
     fetchData();
     const interval = setInterval(() => {
-      fetchData();
-    }, 3000);
+      fetchData(0, messagesRef.current.length);
+      if (messagesRef.current.length === 10) {
+        setHasMore(true);
+      }
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
-  const fetchData = async () => {
-    const messages = await getMessages(idAccount, user?.idAccount!, 0, 255);
-    setMessages(messages.sort(sortByDate).slice(0, 5));
+  const fetchData = async (from: number = 0, to: number = 10) => {
+    const newMessages = await getMessages(idAccount, user?.idAccount!, from, to);
+    if (from > 0) {
+      setMessages([...messages, ...newMessages.sort(sortByDate)]);
+    } else {
+      setMessages(newMessages.sort(sortByDate));
+    }
+  };
+
+  const fetchMoreData = async () => {
+    setTimeout(async () => {
+      const newMessages = await getMessages(idAccount, user?.idAccount!, messages.length, messages.length + 10);
+      setMessages([...messages, ...newMessages]);
+      if (newMessages.length < 10) {
+        setHasMore(false);
+      }
+    }, 1500);
   };
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    await sendMessage(user?.idAccount!, idAccount, newMessage, dateToOracleDate(new Date()));
-    fetchData();
-    setNewMessage("");
+    if (newMessage) {
+      await sendMessage(user?.idAccount!, idAccount, newMessage, dateToOracleDate(new Date()));
+      fetchData();
+      setNewMessage("");
+    }
   };
 
   return (
@@ -52,30 +76,50 @@ const ChatBox: FunctionComponent<ChatBoxProps> = ({ name, surname, idAccount, ex
         </Card.Title>
       </div>
       <Card.Body>
-        {messages
-          .slice(0, 5)
-          .reverse()
-          .map(({ receiver_name, receiver_surname, message, send_date, id_sender }, index) => {
-            return (
-              <div
-                className={`mb-2 d-flex justify-content-${id_sender === user?.idAccount ? "end" : "start"}`}
-                key={index}
-              >
-                <Toast>
-                  <Toast.Header closeButton={false}>
-                    <GrUser className="mr-1" />
-                    <strong className="mr-auto">
-                      {id_sender === user?.idAccount ? user.name + " " + user.surname : name + " " + surname}
-                    </strong>
-                    <small>
-                      · <ReactTimeAgo date={new Date(send_date)} locale="en-US" />
-                    </small>
-                  </Toast.Header>
-                  <Toast.Body>{message}</Toast.Body>
-                </Toast>
-              </div>
-            );
-          })}
+        <div
+          id="scrollableDiv"
+          style={{ height: 600, overflow: "auto", display: "flex", flexDirection: "column-reverse" }}
+        >
+          {messages.length ? (
+            <InfiniteScroll
+              dataLength={messages.length}
+              next={fetchMoreData}
+              style={{ display: "flex", flexDirection: "column-reverse" }}
+              inverse={true}
+              hasMore={hasMore}
+              loader={
+                <div className="text-center">
+                  <BallBeat color={`#ACACA6`} loading={true} />
+                </div>
+              }
+              scrollableTarget="scrollableDiv"
+            >
+              {messages.reverse().map(({ receiver_name, receiver_surname, message, send_date, id_sender }, index) => {
+                return (
+                  <div
+                    className={`mb-2 d-flex justify-content-${id_sender === user?.idAccount ? "end" : "start"}`}
+                    key={index}
+                  >
+                    <Toast>
+                      <Toast.Header closeButton={false}>
+                        <GrUser className="mr-1" />
+                        <strong className="mr-auto">
+                          {id_sender === user?.idAccount ? user.name + " " + user.surname : name + " " + surname}
+                        </strong>
+                        <small>
+                          · <ReactTimeAgo date={new Date(send_date)} locale="en-US" />
+                        </small>
+                      </Toast.Header>
+                      <Toast.Body>{message}</Toast.Body>
+                    </Toast>
+                  </div>
+                );
+              })}
+            </InfiniteScroll>
+          ) : (
+            <h4 className="text-center mb-4 text-muted">No messages</h4>
+          )}
+        </div>
       </Card.Body>
       <Card.Footer>
         <Form onSubmit={handleSendMessage}>

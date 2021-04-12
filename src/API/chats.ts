@@ -18,7 +18,6 @@ export async function getMessages(idReceiver: number, idSender: number, startRow
 export async function getChatList(idReceiver: number): Promise<Array<IChatUser>> {
   try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/listChat/${idReceiver}`);
-    console.log(data)
     return data;
   } catch (e) {
     console.log(e);
@@ -32,4 +31,18 @@ export async function sendMessage(idSender: number, idReceiver: number, message:
     } catch (e) {
         console.log(e)
     }
+}
+
+export async function getUsersByNickname(idAssoc:number, nickname: string): Promise<Array<IChatUser>> {
+  try {
+    const {data} = await axios.get(`http://localhost:8080/nexDoor/search/user/${idAssoc}/${nickname}`);
+    const mappedData:Array<IChatUser> = data.map((user) => {
+      const chatUser:IChatUser = {idSender: user.idAccount, name:user.name, surname: user.surname}
+      return chatUser;
+    })
+    return mappedData;
+  } catch (e) {
+    console.log(e)
+  }
+  return [];
 }
