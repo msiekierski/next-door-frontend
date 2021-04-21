@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { getGroupsUserBelongTo, getGroupUsers } from "../../API/groups";
+import {
+  getGroupInfo,
+  getGroupsUserBelongTo,
+  getGroupUsers,
+  getPrivateAnnouncements,
+  getPrivateEvents,
+  setUsersGroupStatus,
+} from "../../API/groups";
 import { UserContext } from "../Login/UserContext";
 
 const PrivateGroupsContext = React.createContext();
@@ -7,6 +14,9 @@ const PrivateGroupsContext = React.createContext();
 const PrivateGroupsProvider = ({ children }) => {
   const [groups, setGroups] = useState([]);
   const user = useContext(UserContext);
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
+  const [privateGroup, setPrivateGroup] = useState({ groupInfo: { title: "" } });
+  const [groupLoading, setGroupLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +37,52 @@ const PrivateGroupsProvider = ({ children }) => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [user.idAccount]);
 
-  return <PrivateGroupsContext.Provider value={{ groups }}>{children}</PrivateGroupsContext.Provider>;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedGroupId) {
+        await Promise.all([
+          getPrivateEvents(selectedGroupId),
+          getPrivateAnnouncements(selectedGroupId),
+          getGroupInfo(selectedGroupId),
+        ]).then((values) => {
+          const feed = [...values[0], ...values[1]].sort(sortByDate);
+          setPrivateGroup({ ...privateGroup, feed: feed, groupInfo: values[2] });
+          setGroupLoading(false);
+        });
+      }
+    };
+    fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [selectedGroupId, privateGroup]);
+
+  const exitGroupView = () => {
+    setSelectedGroupId(null);
+    setPrivateGroup({});
+    setGroupLoading(true);
+  };
+
+  const setUsersStatus = async (idUser, idGroup, status) => {
+    await setUsersGroupStatus(idGroup, idUser, status);
+  };
+
+  return (
+    <PrivateGroupsContext.Provider
+      value={{ groups, selectedGroupId, setSelectedGroupId, privateGroup, groupLoading, exitGroupView, setUsersStatus }}
+    >
+      {children}
+    </PrivateGroupsContext.Provider>
+  );
 };
+
+function sortByDate(a, b) {
+  return Number(new Date(b.creationDate)) - Number(new Date(a.creationDate));
+}
 
 export { PrivateGroupsContext, PrivateGroupsProvider };

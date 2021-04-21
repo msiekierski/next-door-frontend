@@ -23,7 +23,7 @@ const Announcement: FunctionComponent<Props> = ({
   creationDate,
   name,
   surname,
-  replays,
+  replies: replays,
   removeFeed,
   updateFeed,
 }) => {

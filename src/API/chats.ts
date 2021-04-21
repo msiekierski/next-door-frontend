@@ -18,7 +18,10 @@ export async function getMessages(idReceiver: number, idSender: number, startRow
 export async function getChatList(idReceiver: number): Promise<Array<IChatUser>> {
   try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/listChat/${idReceiver}`);
-    return data;
+    const chatList = data.map((chat) => {
+      return {name: chat.name, surname: chat.surname, idSender: chat.idAway}
+    })
+    return chatList;
   } catch (e) {
     console.log(e);
   }

@@ -1,22 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { getGroupUsers } from "../../../API/groups";
-import ModalUsers from "../../Event/Users/EventUsers";
 import { PrivateGroupsContext } from "../context";
 
 export const ListGroupUserBelongsTo = () => {
-  const { groups } = useContext(PrivateGroupsContext);
-    const [showModal, setShowModal] = useState(false);
-
-    console.log(groups)
+  const { groups, setSelectedGroupId } = useContext(PrivateGroupsContext);
 
   return (
     <>
       {groups &&
-        groups.map((group) => {
+        groups.map((group, index) => {
           return (
-            <Card className="mt-2" key={groups.idGroup}>
+            <Card className="mt-2" key={index} onClick={() => setSelectedGroupId(group.idGroup)}>
               <Card.Header>
                 <b>{group.title}</b>
               </Card.Header>
@@ -26,10 +21,6 @@ export const ListGroupUserBelongsTo = () => {
                   <div>Owned By: {group.ownerName + " " + group.ownerSurname}</div>
                 </div>
               </Card.Body>
-              <Card.Footer className="text-right">
-                  {showModal && <ModalUsers users={group.users} show={showModal} onHide={() => setShowModal(false)} title={`Memebers of ${group.title}`}/>}
-                <Card.Link onClick={() => setShowModal(true)} href="#">Show {group.users.length} members </Card.Link>
-              </Card.Footer>
             </Card>
           );
         })}

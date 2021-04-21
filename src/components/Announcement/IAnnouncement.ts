@@ -11,7 +11,7 @@ interface IAnnouncement {
   creationDate: string;
   name: string;
   surname: string;
-  replays: Array<IComment>;
+  replies: Array<IComment>;
 }
 
 export default IAnnouncement;
