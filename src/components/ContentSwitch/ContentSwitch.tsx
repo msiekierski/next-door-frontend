@@ -6,6 +6,8 @@ import Administration from "../Administration/Administration";
 import AdvertisementsPage from "../Advertisements/AdvertisementsPage/AdvertisementsPage";
 import Settings from "../Settings/Settings";
 import Chat from "../Chat/Chat";
+import PrivateGroups from "../PrivateGroups/PrivateGroups";
+import { PrivateGroupsProvider } from "../PrivateGroups/context";
 
 interface OwnProps {}
 
@@ -28,7 +30,12 @@ const ContentSwitch: FunctionComponent<Props> = (props) => {
           <Settings />
         </Route>
         <Route path="/chat">
-          <Chat />  
+          <Chat />
+        </Route>
+        <Route path="/groups">
+          <PrivateGroupsProvider>
+            <PrivateGroups />
+          </PrivateGroupsProvider>
         </Route>
       </Switch>
     </Container>

@@ -20,6 +20,9 @@ const LinksResident: FunctionComponent<Props> = (props) => {
       <LinkContainer to="/chat">
         <Nav.Link className="pr-5 pl-5">Chat</Nav.Link>
       </LinkContainer>
+      <LinkContainer to="groups">
+        <Nav.Link className="pr-5 pl-5">Groups</Nav.Link>
+      </LinkContainer>
       {/*<LinkContainer to="/groups">*/}
       {/*  <Nav.Link className="pr-5 pl-5">Groups</Nav.Link>*/}
       {/*</LinkContainer>*/}

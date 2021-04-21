@@ -6,14 +6,15 @@ import IEventUser from "../IEventUser";
 interface Props {
     users: Array<IEventUser>
     show: boolean,
-    onHide: Function
+    onHide: Function,
+    title: string;
 }
 
-const EventUsers: FunctionComponent<Props> = ({users, show, onHide}) => {
+const ModalUsers: FunctionComponent<Props> = ({users, show, onHide, title}) => {
     return (
       <Modal animation={false} size="lg" show={show} onHide={onHide} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Participants</Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
@@ -30,4 +31,4 @@ const EventUsers: FunctionComponent<Props> = ({users, show, onHide}) => {
     );
 }
 
-export default EventUsers;
+export default ModalUsers;
