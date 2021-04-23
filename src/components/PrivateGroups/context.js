@@ -5,6 +5,7 @@ import {
   getGroupUsers,
   getPrivateAnnouncements,
   getPrivateEvents,
+  getSuggestedGroups,
   setUsersGroupStatus,
 } from "../../API/groups";
 import { UserContext } from "../Login/UserContext";
@@ -17,6 +18,7 @@ const PrivateGroupsProvider = ({ children }) => {
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [privateGroup, setPrivateGroup] = useState({ groupInfo: { title: "" } });
   const [groupLoading, setGroupLoading] = useState(true);
+  const [suggestedGroups, setSuggestedGroups] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +31,7 @@ const PrivateGroupsProvider = ({ children }) => {
       tempGroups.forEach((group, index) => {
         group.users = groupsUsers[index];
       });
+      setSuggestedGroups(await getSuggestedGroups(user.idAssoc, user.idAccount));
       setGroups(tempGroups);
     };
     const interval = setInterval(() => {
@@ -39,6 +42,7 @@ const PrivateGroupsProvider = ({ children }) => {
     };
   }, [user.idAccount]);
 
+  //fetching given private group
   useEffect(() => {
     const fetchData = async () => {
       if (selectedGroupId) {
@@ -74,7 +78,16 @@ const PrivateGroupsProvider = ({ children }) => {
 
   return (
     <PrivateGroupsContext.Provider
-      value={{ groups, selectedGroupId, setSelectedGroupId, privateGroup, groupLoading, exitGroupView, setUsersStatus }}
+      value={{
+        groups,
+        selectedGroupId,
+        setSelectedGroupId,
+        privateGroup,
+        groupLoading,
+        exitGroupView,
+        setUsersStatus,
+        suggestedGroups,
+      }}
     >
       {children}
     </PrivateGroupsContext.Provider>

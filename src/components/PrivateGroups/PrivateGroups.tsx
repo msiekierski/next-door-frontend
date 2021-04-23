@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { PrivateGroupsContext } from "./context";
-import { ListGroupUserBelongsTo } from "./ListGroupsUserBelongsTo/ListGroupUserBelongsTo";
+import { ListGroupUserBelongsTo } from "./GroupsLists/ListGroupUserBelongsTo";
+import ListGroupUserNotBelongingTo from "./GroupsLists/ListGroupUserNotBelongingTo";
 import PrivateGroup from "./PrivateGroup/PrivateGroup";
 
 const PrivateGroups = () => {
@@ -16,7 +17,7 @@ const PrivateGroups = () => {
         <ListGroupUserBelongsTo />
       </Tab>
       <Tab eventKey="suggestedGroups" title="Join other groups">
-        <div>Grupy do ktorych chcesz dojsc</div>
+        <ListGroupUserNotBelongingTo />
       </Tab>
     </Tabs>
   );
