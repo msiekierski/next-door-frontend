@@ -10,7 +10,6 @@ export async function getAllAdvertisements(idAccount?: number) {
     );
     return data;
   } catch (e) {
-    console.log(e);
     return [];
   }
 }
@@ -23,7 +22,6 @@ export async function getAllAdvertisementsEstate(idEstate?: number) {
     );
     return data;
   } catch (e) {
-    console.log(e);
     return [];
   }
 }
@@ -35,18 +33,13 @@ export async function putAdvertisement(adId: number, title: string, description:
       description,
     });
     return response.data;
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 }
 
 export async function deleteAdvertisement(adId: number) {
   try {
     const response = await axios.delete(`http://localhost:8080/nexDoor/delete/ad/${adId}`, {});
-    console.log(response);
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 }
 
 export async function createAdvertisement(newAdvert: IAdvertisement) {
@@ -54,10 +47,9 @@ export async function createAdvertisement(newAdvert: IAdvertisement) {
     const response = await axios.post(`http://localhost:8080/nexDoor/create/ad`, {
       ...newAdvert,
     });
-    console.log(response);
+
     return response.data;
   } catch (e) {
-    console.log(e);
     return false;
   }
 }
@@ -65,10 +57,9 @@ export async function createAdvertisement(newAdvert: IAdvertisement) {
 export async function getAllHousingAssoc() {
   try {
     const { data } = await axios.get<Array<IHousingAssoc>>(`http://localhost:8080/nexDoor/get/housingassoc`, {});
-    console.log(data);
+
     return data;
   } catch (e) {
-    console.log(e);
     return [];
   }
 }

@@ -44,11 +44,9 @@ const PrivateGroupsProvider = ({ children }) => {
 
   useEffect(() => {
     fetchGroups();
-    const interval =
-      setInterval(() => {
-        fetchGroups();
-      },
-      1000);
+    const interval = setInterval(() => {
+      fetchGroups();
+    }, 1000);
     return () => {
       clearInterval(interval);
     };
@@ -80,7 +78,6 @@ const PrivateGroupsProvider = ({ children }) => {
         const elements = await Promise.all([
           getPrivateEvents(state.selectedGroupId),
           getPrivateAnnouncements(state.selectedGroupId),
-          getGroupInfo(state.selectedGroupId),
         ]);
         const feed = [...elements[0], elements[1]].sort(sortByDate);
         dispatch({ type: GET_GROUP_SUCCESS, payload: feed });
@@ -106,7 +103,7 @@ const PrivateGroupsProvider = ({ children }) => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [state.selectedGroupId]);
 
   const setUsersStatus = async (idUser, idGroup, status) => {
     await setUsersGroupStatus(idGroup, idUser, status);

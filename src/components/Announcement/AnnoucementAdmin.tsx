@@ -23,12 +23,10 @@ const AnnouncementAdmin: FunctionComponent<Props> = ({
   const [descriptionEdit, setDescriptionEdit] = useState(desc);
 
   const handleReplyClick = (event: MouseEvent) => {
-    console.log("reply shows");
     // event.preventDefault();
   };
 
   const handleShowRepliesClick = (event: MouseEvent) => {
-    console.log("reply shows");
     event.preventDefault();
   };
 

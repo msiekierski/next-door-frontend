@@ -39,7 +39,7 @@ const Community = () => {
       const ads = await getAllAdvertisementsEstate(user?.idAssoc);
       setCurrAd(Math.floor(Math.random() * ads.length));
       setAds(ads);
-      console.log(ads);
+
       const communalAnnouncements = announcements.filter((e) => e.announcementType == ANNOUNCEMENT_TYPE_COMMUNAL);
       communalAnnouncements.forEach((e) => (e.type = ANNOUNCEMENT_TYPE));
       events.forEach((e) => (e.type = EVENT_TYPE));

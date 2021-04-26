@@ -18,7 +18,7 @@ const Reply: FunctionComponent<Props> = ({ commentAdd, idAnnouncement }) => {
 
   async function handleReply(e: FormEvent) {
     e.preventDefault();
-    console.log(idAnnouncement);
+
     let desc = content && content.current ? content.current.value : "";
     const newComment: IComment = {
       name: user ? user.name : "",

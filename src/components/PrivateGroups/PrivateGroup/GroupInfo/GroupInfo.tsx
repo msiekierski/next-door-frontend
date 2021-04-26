@@ -15,12 +15,8 @@ const GroupInfo = () => {
   const [showModalUsersNormal, setShowModalUsersNormal] = useState(false);
   const [showModalJoinRequests, setShowModalJoinRequests] = useState(false);
   const [showModalLeaveGroup, setShowModalLeaveGroup] = useState(false);
-  const { users } = privateGroup;
-  const acceptedUsers = users.filter((groupUser) => groupUser.status === ACCEPTED);
-  const pendingRequests = users.filter((groupUser) => groupUser.status === PENDING);
   const isUserOwner = user?.idAccount === privateGroup.ownerId;
-  console.log("accepted");
-  console.log(users);
+
   const onLeaveConfirm = () => {
     setShowModalLeaveGroup(false);
     removeUserFromGroup(selectedGroupId, user?.idAccount);
@@ -54,7 +50,7 @@ const GroupInfo = () => {
           <Card.Body>
             {showModalUsersNormal && (
               <ModalUsers
-                users={acceptedUsers}
+                users={privateGroup.users.filter((groupUser) => groupUser.status === ACCEPTED)}
                 show={showModalUsersNormal}
                 onHide={() => setShowModalUsersNormal(false)}
                 title={`Members of ${privateGroup.title}`}
@@ -63,20 +59,20 @@ const GroupInfo = () => {
             <div className="d-flex justify-content-between">
               {privateGroup.description}
               <Card.Link href="#" onClick={() => setShowModalUsersNormal(true)}>
-                See {acceptedUsers.length} members
+                See {privateGroup.users.filter((groupUser) => groupUser.status === ACCEPTED).length} members
               </Card.Link>
             </div>
           </Card.Body>
         </Card.Header>
         <Card.Footer>
           <JoinRequests
-            users={pendingRequests}
+            users={privateGroup.users.filter((groupUser) => groupUser.status === PENDING)}
             show={showModalJoinRequests}
             onHide={() => setShowModalJoinRequests(false)}
           />
           {isUserOwner ? (
             <Card.Link href="#" onClick={() => setShowModalJoinRequests(true)}>
-              You have {pendingRequests.length} join request(s)
+              You have {privateGroup.users.filter((groupUser) => groupUser.status === PENDING).length} join request(s)
             </Card.Link>
           ) : (
             <Card.Link onClick={() => setShowModalLeaveGroup(true)}>Leave group</Card.Link>
