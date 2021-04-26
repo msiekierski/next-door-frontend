@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
+  deleteUserFromGroup,
   getGroupInfo,
   getGroupsUserBelongTo,
   getGroupUsers,
@@ -9,6 +10,7 @@ import {
   setUsersGroupStatus,
 } from "../../API/groups";
 import { UserContext } from "../Login/UserContext";
+import { ACCEPTED } from "./PrivateGroup/InvitationSatatus";
 
 const PrivateGroupsContext = React.createContext();
 
@@ -21,6 +23,7 @@ const PrivateGroupsProvider = ({ children }) => {
   const [suggestedGroups, setSuggestedGroups] = useState([]);
 
   useEffect(() => {
+    let mounted = true;
     const fetchData = async () => {
       const tempGroups = await getGroupsUserBelongTo(user.idAccount);
       const promises = tempGroups.map(async (group) => {
@@ -31,19 +34,23 @@ const PrivateGroupsProvider = ({ children }) => {
       tempGroups.forEach((group, index) => {
         group.users = groupsUsers[index];
       });
-      setSuggestedGroups(await getSuggestedGroups(user.idAssoc, user.idAccount));
-      setGroups(tempGroups);
+      if (mounted) {
+        setSuggestedGroups(await getSuggestedGroups(user.idAssoc, user.idAccount));
+        setGroups(tempGroups.filter((group) => group.userStatus === ACCEPTED));
+      }
     };
     const interval = setInterval(() => {
       fetchData();
     }, 1000);
     return () => {
       clearInterval(interval);
+      mounted = false;
     };
   }, [user.idAccount]);
 
   //fetching given private group
   useEffect(() => {
+    let mounted = true;
     const fetchData = async () => {
       if (selectedGroupId) {
         await Promise.all([
@@ -52,8 +59,10 @@ const PrivateGroupsProvider = ({ children }) => {
           getGroupInfo(selectedGroupId),
         ]).then((values) => {
           const feed = [...values[0], ...values[1]].sort(sortByDate);
-          setPrivateGroup({ ...privateGroup, feed: feed, groupInfo: values[2] });
-          setGroupLoading(false);
+          if (mounted) {
+            setPrivateGroup({ ...privateGroup, feed: feed, groupInfo: values[2] });
+            setGroupLoading(false);
+          }
         });
       }
     };
@@ -63,6 +72,7 @@ const PrivateGroupsProvider = ({ children }) => {
     }, 3000);
     return () => {
       clearInterval(interval);
+      mounted = false;
     };
   }, [selectedGroupId, privateGroup]);
 
@@ -76,6 +86,10 @@ const PrivateGroupsProvider = ({ children }) => {
     await setUsersGroupStatus(idGroup, idUser, status);
   };
 
+  const removeUserFromGroup = async (idGroup, idUser) => {
+    await deleteUserFromGroup(idGroup, idUser);
+  };
+
   return (
     <PrivateGroupsContext.Provider
       value={{
@@ -87,6 +101,7 @@ const PrivateGroupsProvider = ({ children }) => {
         exitGroupView,
         setUsersStatus,
         suggestedGroups,
+        removeUserFromGroup,
       }}
     >
       {children}

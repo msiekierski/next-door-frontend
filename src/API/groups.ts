@@ -22,7 +22,7 @@ export async function getGroupUsers(idGroup: number): Promise<Array<IGroupUser>>
 
 export async function getPrivateEvents(idGroup: number): Promise<Array<IEvent>> {
   try {
-    const { data } = await axios.get(`http://localhost:8080/nexDoor/get//groups/events/${idGroup}`);
+    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/groups/events/${idGroup}`);
     return data;
   } catch (e) {}
   return [];
@@ -45,6 +45,7 @@ export async function getGroupInfo(idGroup: number) {
 
 export async function setUsersGroupStatus(idGroup: number, idUser: number, status: number) {
   try {
+    console.log(`http://localhost:8080/nexDoor/join/group/${idGroup}/user/${idUser}/status/${status}`);
     await axios.put(`http://localhost:8080/nexDoor/join/group/${idGroup}/user/${idUser}/status/${status}`);
   } catch (e) {}
 }

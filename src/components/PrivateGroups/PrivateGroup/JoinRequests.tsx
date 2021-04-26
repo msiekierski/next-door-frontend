@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
 import { ImCross, ImCheckmark, ImBlocked } from "react-icons/im";
+import { deleteUserFromGroup } from "../../../API/groups";
 import { PrivateGroupsContext } from "../context";
 import { ACCEPTED_RESPONSE_CODE, BLOCKED_RESPONSE_CODE, REJECTED_RESPONSE_CODE } from "./InvitationSatatus";
 
@@ -8,7 +9,11 @@ const JoinRequests = ({ users, show, onHide }) => {
   const { setUsersStatus, selectedGroupId } = useContext(PrivateGroupsContext);
 
   const handleDecision = (idUser: number, status: number) => {
-    setUsersStatus(idUser, selectedGroupId, status);
+    setUsersStatus(selectedGroupId, idUser, status);
+  };
+
+  const handleRejection = async (idUser: number) => {
+    await deleteUserFromGroup(selectedGroupId, idUser);
   };
 
   return (
@@ -43,7 +48,7 @@ const JoinRequests = ({ users, show, onHide }) => {
                         <ImCross
                           title="Reject"
                           className="mr-2 text-warning"
-                          onClick={() => handleDecision(user.idAccount, REJECTED_RESPONSE_CODE)}
+                          onClick={() => handleRejection(user.idAccount)}
                         />
                         <ImBlocked
                           title="Block"

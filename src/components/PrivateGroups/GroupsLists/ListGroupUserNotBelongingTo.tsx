@@ -4,17 +4,21 @@ import { deleteUserFromGroup, sendJoinRequest } from "../../../API/groups";
 import { UserContext } from "../../Login/UserContext";
 import { PrivateGroupsContext } from "../context";
 import { NOT_IN_GROUP } from "../PrivateGroup/InvitationSatatus";
+import { useToasts } from "react-toast-notifications";
 
 const ListGroupUserNotBelongingTo = () => {
   const { suggestedGroups } = useContext(PrivateGroupsContext);
   const user = useContext(UserContext);
+  const { addToast } = useToasts();
 
   const handleJoinRequest = async (idGroup: number) => {
     await sendJoinRequest(idGroup, user?.idAccount!);
+    addToast("Join request has been sent", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000 });
   };
 
   const handleCancelRequest = async (idGroup: number) => {
     await deleteUserFromGroup(idGroup, user?.idAccount!);
+    addToast("Join request has been cancelled", { appearance: "success", autoDismiss: true, autoDismissTimeout: 2000 });
   };
 
   return (

@@ -6,16 +6,18 @@ import ListGroupUserNotBelongingTo from "./GroupsLists/ListGroupUserNotBelonging
 import PrivateGroup from "./PrivateGroup/PrivateGroup";
 
 const PrivateGroups = () => {
-  const { selectedGroupId } = useContext(PrivateGroupsContext);
+  const { selectedGroupId, groups } = useContext(PrivateGroupsContext);
 
   if (selectedGroupId) {
     return <PrivateGroup />;
   }
   return (
     <Tabs className="mt-3 justify-content-center nav-fill">
-      <Tab eventKey="belongingTo" title="Groups you belong to">
-        <ListGroupUserBelongsTo />
-      </Tab>
+      {groups.length > 0 && (
+        <Tab eventKey="belongingTo" title="Groups you belong to">
+          <ListGroupUserBelongsTo />
+        </Tab>
+      )}
       <Tab eventKey="suggestedGroups" title="Join other groups">
         <ListGroupUserNotBelongingTo />
       </Tab>
