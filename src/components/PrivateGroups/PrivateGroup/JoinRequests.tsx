@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
 import { ImCross, ImCheckmark, ImBlocked } from "react-icons/im";
 import { deleteUserFromGroup } from "../../../API/groups";
-import { PrivateGroupsContext } from "../context";
+import { PrivateGroupsContext, useGroupsContext } from "../context";
 import { ACCEPTED_RESPONSE_CODE, BLOCKED_RESPONSE_CODE, REJECTED_RESPONSE_CODE } from "./InvitationSatatus";
 
 const JoinRequests = ({ users, show, onHide }) => {
-  const { setUsersStatus, selectedGroupId } = useContext(PrivateGroupsContext);
+  const { setUsersStatus, selectedGroupId } = useGroupsContext();
 
   const handleDecision = (idUser: number, status: number) => {
     setUsersStatus(selectedGroupId, idUser, status);

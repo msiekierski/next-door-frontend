@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { PrivateGroupsContext } from "../context";
+import { PrivateGroupsContext, useGroupsContext } from "../context";
 
 export const ListGroupUserBelongsTo = () => {
-  const { groups, setSelectedGroupId } = useContext(PrivateGroupsContext);
-
+  const { groups, setSelectedGroup } = useGroupsContext();
   return (
     <>
       {groups &&
         groups.map((group, index) => {
           return (
-            <Card className="mt-2" key={index} onClick={() => setSelectedGroupId(group.idGroup)}>
+            <Card className="mt-2" key={index} onClick={() => setSelectedGroup(group.idGroup)}>
               <Card.Header>
                 <b>{group.title}</b>
               </Card.Header>

@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useReducer } from "react";
+import groupsReducer from "../../reducers/groupsReducer";
 import {
   deleteUserFromGroup,
   getGroupInfo,
@@ -11,20 +12,51 @@ import {
 } from "../../API/groups";
 import { UserContext } from "../Login/UserContext";
 import { ACCEPTED } from "./PrivateGroup/InvitationSatatus";
+import axios from "axios";
+import {
+  GET_GROUPS_BEGIN,
+  GET_GROUPS_ERROR,
+  GET_GROUPS_SUCCESS,
+  GET_GROUP_BEGIN,
+  GET_GROUP_ERROR,
+  GET_GROUP_SUCCESS,
+  SET_SELECTED_GROUP,
+} from "../../reducers/groupsActions";
 
 const PrivateGroupsContext = React.createContext();
 
+const initialState = {
+  groups: [],
+  groupsError: false,
+  selectedGroupId: null,
+  privateGroup: null,
+  groupsLoading: true,
+  suggestedGroups: [],
+  groupLoading: false,
+  groupError: false,
+  firstFetchGroups: true,
+  firstFetchGroup: true,
+};
+
 const PrivateGroupsProvider = ({ children }) => {
-  const [groups, setGroups] = useState([]);
   const user = useContext(UserContext);
-  const [selectedGroupId, setSelectedGroupId] = useState(null);
-  const [privateGroup, setPrivateGroup] = useState({ groupInfo: { title: "" } });
-  const [groupLoading, setGroupLoading] = useState(true);
-  const [suggestedGroups, setSuggestedGroups] = useState([]);
+  const [state, dispatch] = useReducer(groupsReducer, initialState);
 
   useEffect(() => {
-    let mounted = true;
-    const fetchData = async () => {
+    fetchGroups();
+    const interval =
+      setInterval(() => {
+        fetchGroups();
+      },
+      1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const fetchGroups = async () => {
+    dispatch({ type: GET_GROUPS_BEGIN });
+    try {
       const tempGroups = await getGroupsUserBelongTo(user.idAccount);
       const promises = tempGroups.map(async (group) => {
         const users = await getGroupUsers(group.idGroup);
@@ -34,53 +66,47 @@ const PrivateGroupsProvider = ({ children }) => {
       tempGroups.forEach((group, index) => {
         group.users = groupsUsers[index];
       });
-      if (mounted) {
-        setSuggestedGroups(await getSuggestedGroups(user.idAssoc, user.idAccount));
-        setGroups(tempGroups.filter((group) => group.userStatus === ACCEPTED));
+      const suggestedGroups = await getSuggestedGroups(user.idAssoc, user.idAccount);
+      dispatch({ type: GET_GROUPS_SUCCESS, payload: { groups: tempGroups, suggestedGroups } });
+    } catch (e) {
+      dispatch({ type: GET_GROUPS_ERROR });
+    }
+  };
+
+  const fetchPrivateGroup = async () => {
+    dispatch({ type: GET_GROUP_BEGIN });
+    try {
+      if (state.selectedGroupId) {
+        const elements = await Promise.all([
+          getPrivateEvents(state.selectedGroupId),
+          getPrivateAnnouncements(state.selectedGroupId),
+          getGroupInfo(state.selectedGroupId),
+        ]);
+        const feed = [...elements[0], elements[1]].sort(sortByDate);
+        dispatch({ type: GET_GROUP_SUCCESS, payload: feed });
       }
-    };
+    } catch (e) {
+      dispatch({ type: GET_GROUP_ERROR });
+    }
+  };
+
+  const setSelectedGroup = (id) => {
+    dispatch({ type: SET_SELECTED_GROUP, payload: id });
+  };
+
+  useEffect(() => {
+    if (state.selectedGroupId != null) {
+      fetchPrivateGroup();
+    }
     const interval = setInterval(() => {
-      fetchData();
+      if (state.selectedGroupId != null) {
+        fetchPrivateGroup();
+      }
     }, 1000);
     return () => {
       clearInterval(interval);
-      mounted = false;
     };
-  }, [user.idAccount]);
-
-  //fetching given private group
-  useEffect(() => {
-    let mounted = true;
-    const fetchData = async () => {
-      if (selectedGroupId) {
-        await Promise.all([
-          getPrivateEvents(selectedGroupId),
-          getPrivateAnnouncements(selectedGroupId),
-          getGroupInfo(selectedGroupId),
-        ]).then((values) => {
-          const feed = [...values[0], ...values[1]].sort(sortByDate);
-          if (mounted) {
-            setPrivateGroup({ ...privateGroup, feed: feed, groupInfo: values[2] });
-            setGroupLoading(false);
-          }
-        });
-      }
-    };
-    fetchData();
-    const interval = setInterval(() => {
-      fetchData();
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-      mounted = false;
-    };
-  }, [selectedGroupId, privateGroup]);
-
-  const exitGroupView = () => {
-    setSelectedGroupId(null);
-    setPrivateGroup({});
-    setGroupLoading(true);
-  };
+  }, []);
 
   const setUsersStatus = async (idUser, idGroup, status) => {
     await setUsersGroupStatus(idGroup, idUser, status);
@@ -93,20 +119,20 @@ const PrivateGroupsProvider = ({ children }) => {
   return (
     <PrivateGroupsContext.Provider
       value={{
-        groups,
-        selectedGroupId,
-        setSelectedGroupId,
-        privateGroup,
-        groupLoading,
-        exitGroupView,
-        setUsersStatus,
-        suggestedGroups,
+        ...state,
+        setSelectedGroup,
+        fetchPrivateGroup,
         removeUserFromGroup,
+        setUsersStatus,
       }}
     >
       {children}
     </PrivateGroupsContext.Provider>
   );
+};
+
+export const useGroupsContext = () => {
+  return useContext(PrivateGroupsContext);
 };
 
 function sortByDate(a, b) {

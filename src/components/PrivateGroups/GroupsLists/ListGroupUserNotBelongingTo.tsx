@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Button, Card } from "react-bootstrap";
 import { deleteUserFromGroup, sendJoinRequest } from "../../../API/groups";
 import { UserContext } from "../../Login/UserContext";
-import { PrivateGroupsContext } from "../context";
+import { PrivateGroupsContext, useGroupsContext } from "../context";
 import { NOT_IN_GROUP } from "../PrivateGroup/InvitationSatatus";
 import { useToasts } from "react-toast-notifications";
 
 const ListGroupUserNotBelongingTo = () => {
-  const { suggestedGroups } = useContext(PrivateGroupsContext);
+  const { suggestedGroups } = useGroupsContext();
   const user = useContext(UserContext);
   const { addToast } = useToasts();
 

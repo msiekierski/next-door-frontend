@@ -4,43 +4,31 @@ import IEvent from "../components/Event/IEvent";
 import { IGroupUser } from "../components/PrivateGroups/IGroupUser";
 import IPrivateGroup from "../components/PrivateGroups/IPrivateGroup";
 
+const PREFIX = "http://localhost:8080/";
+
 export async function getGroupsUserBelongTo(idUser: number): Promise<Array<IPrivateGroup>> {
-  try {
-    const { data } = await axios.get(`http://localhost:8080/nexDoor/get/user/${idUser}/groups`);
-    return data;
-  } catch (e) {}
-  return [];
+  const { data } = await axios.get(`http://localhost:8080/nexDoor/get/user/${idUser}/groups`);
+  return data;
 }
 
 export async function getGroupUsers(idGroup: number): Promise<Array<IGroupUser>> {
-  try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/privateGroup/users/${idGroup}`);
     return data;
-  } catch (e) {}
-  return [];
 }
 
 export async function getPrivateEvents(idGroup: number): Promise<Array<IEvent>> {
-  try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/groups/events/${idGroup}`);
     return data;
-  } catch (e) {}
-  return [];
 }
 
 export async function getPrivateAnnouncements(idGroup: number): Promise<Array<IAnnouncement>> {
-  try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/groups/announcement/${idGroup}`);
     return data;
-  } catch (e) {}
-  return [];
 }
 
 export async function getGroupInfo(idGroup: number) {
-  try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/group/${idGroup}`);
     return data;
-  } catch (e) {}
 }
 
 export async function setUsersGroupStatus(idGroup: number, idUser: number, status: number) {
@@ -51,11 +39,8 @@ export async function setUsersGroupStatus(idGroup: number, idUser: number, statu
 }
 
 export async function getSuggestedGroups(idAssoc: number, idAccount: number) {
-  try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/group/not/${idAssoc}/${idAccount}`);
     return data;
-  } catch (e) {}
-  return [];
 }
 
 export async function sendJoinRequest(idGroup: number, idUser: number) {

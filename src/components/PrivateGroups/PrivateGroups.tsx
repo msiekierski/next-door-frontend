@@ -1,13 +1,23 @@
 import React, { useContext } from "react";
-import { Tab, Tabs } from "react-bootstrap";
-import { PrivateGroupsContext } from "./context";
+import { Tab, Tabs, Spinner } from "react-bootstrap";
+import ErrorPage from "../ErrorPage/ErrorPage";
+import { PrivateGroupsContext, useGroupsContext } from "./context";
 import { ListGroupUserBelongsTo } from "./GroupsLists/ListGroupUserBelongsTo";
 import ListGroupUserNotBelongingTo from "./GroupsLists/ListGroupUserNotBelongingTo";
+import LoadingSpinner from "./LoadingSpinner";
 import PrivateGroup from "./PrivateGroup/PrivateGroup";
 
 const PrivateGroups = () => {
-  const { selectedGroupId, groups } = useContext(PrivateGroupsContext);
+  const { selectedGroupId } = useContext(PrivateGroupsContext);
 
+  const { groupsLoading, groups, groupsError, firstFetchGroups } = useGroupsContext();
+
+  if (groupsLoading && firstFetchGroups) {
+    return <LoadingSpinner />;
+  }
+  if (groupsError) {
+    return <ErrorPage />;
+  }
   if (selectedGroupId) {
     return <PrivateGroup />;
   }

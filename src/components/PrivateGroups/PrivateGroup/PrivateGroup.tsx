@@ -1,16 +1,19 @@
 import React, { useContext } from "react";
-import { PrivateGroupsContext } from "../context";
+import ErrorPage from "../../ErrorPage/ErrorPage";
+import { PrivateGroupsContext, useGroupsContext } from "../context";
+import LoadingSpinner from "../LoadingSpinner";
 import GroupInfo from "./GroupInfo/GroupInfo";
 
 const PrivateGroup = () => {
-  const { privateGroup, groupLoading } = useContext(PrivateGroupsContext);
+  //const { privateGroup, groupLoading } = useContext(PrivateGroupsContext);
+  const { groupLoading, groupError, firstFetchGroup } = useGroupsContext();
 
-  if (groupLoading) {
-      return <div>Loading...</div>
+  if (groupLoading && firstFetchGroup) {
+    return <LoadingSpinner />;
+  } else if (groupError) {
+    return <ErrorPage />;
   }
-  return (
-      <GroupInfo />
-  );
+  return <GroupInfo />;
 };
 
 export default PrivateGroup;
