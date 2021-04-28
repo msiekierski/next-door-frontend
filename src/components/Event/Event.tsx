@@ -10,7 +10,7 @@ import oracleDateToInputDate from "../../utils/DateConverter";
 import { EVENT_TYPE } from "../../constants/constants";
 import { getUser } from "../../API/login";
 import IEventUser from "./IEventUser";
-import EventUsers from "./Users/EventUsers";
+import ModalUsers from "./Users/EventUsers";
 
 export type Props = IEvent & {
   removeFeed: Function;
@@ -177,7 +177,7 @@ const Event: FunctionComponent<Props> = ({
           </Card.Link>
         </Card.Footer>
       </Card>
-      <EventUsers show={showUsers} onHide={() => setShowUsers(false)} users={users} />
+      <ModalUsers show={showUsers} onHide={() => setShowUsers(false)} users={users} title="Participants"/>
     </>
   );
 };

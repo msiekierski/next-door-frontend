@@ -13,7 +13,7 @@ const SettingsAccountNickname: FunctionComponent<Props> = ({ closeNicknameChange
   const nicknameRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(nicknameRef.current?.value);
+
     await putUser(user?.idAccount!, nicknameRef.current?.value, undefined);
     const newUser = {
       ...JSON.parse(localStorage.getItem("user")!),

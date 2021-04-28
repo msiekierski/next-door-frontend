@@ -25,7 +25,7 @@ const AnnouncementCreator: FunctionComponent<Props> = ({ hideAnnouncementCreator
       title: inputTopic?.current?.value ? inputTopic.current.value : "",
       type: "announcement",
       idAnnouncement: 0,
-      replays: [],
+      replies: [],
       name: "",
       surname: "",
     };

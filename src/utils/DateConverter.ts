@@ -1,12 +1,15 @@
-
-export default function dateToOracleDate(date: Date):string {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
+export default function dateToOracleDate(date: Date): string {
+  var dateStr =
+    date.getFullYear() +
+    "-" +
+    ("00" + (date.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("00" + date.getDate()).slice(-2) +
+    " " +
+    ("00" + date.getHours()).slice(-2) +
+    ":" +
+    ("00" + date.getMinutes()).slice(-2) +
+    ":" +
+    ("00" + date.getSeconds()).slice(-2);
+  return dateStr;
 }

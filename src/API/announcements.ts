@@ -8,7 +8,7 @@ import IComment from "../components/Announcement/Comment/IComment";
 export async function getAllAnnouncements(idAssoc?: number): Promise<Array<IAnnouncement>> {
   try {
     const { data } = await axios.get(`http://localhost:8080/nexDoor/get/announcement/${idAssoc}`, {});
-    console.log(data);
+
     return data;
   } catch (e) {
     return [];
@@ -22,14 +22,12 @@ export async function putAnnouncement(announcementId: number, announcement_type:
       title,
       desc,
     });
-    console.log(response);
   } catch (e) {}
 }
 
 export async function deleteAnnouncement(announcementId: number) {
   try {
     const response = await axios.delete(`http://localhost:8080/nexDoor/delete/announcement/${announcementId}`, {});
-    console.log(response);
   } catch (e) {}
 }
 

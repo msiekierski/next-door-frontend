@@ -35,7 +35,7 @@ const LoginPage: FunctionComponent<Props> = ({ setUser }) => {
     if (mounted) {
       event.preventDefault();
       const user = await getUser(login, password);
-      console.log(user);
+
       if (user) {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));

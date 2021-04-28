@@ -7,6 +7,7 @@ import { SetUserContext, UserContext } from "./components/Login/UserContext";
 import ContentSwitch from "./components/ContentSwitch/ContentSwitch";
 import Navbar from "./components/Navbar/Navbar";
 import { IUser } from "./components/Login/IUser";
+import { ToastProvider } from "react-toast-notifications";
 
 function App() {
   const [user, setUser] = useState<IUser | null>(null);
@@ -23,12 +24,14 @@ function App() {
   if (user) {
     return (
       <SetUserContext.Provider value={setUser}>
-      <UserContext.Provider value={user}>
-        <Router>
-          <Navbar />
-          <ContentSwitch />
-        </Router>
-      </UserContext.Provider>
+        <UserContext.Provider value={user}>
+          <ToastProvider>
+            <Router>
+              <Navbar />
+              <ContentSwitch />
+            </Router>
+          </ToastProvider>
+        </UserContext.Provider>
       </SetUserContext.Provider>
     );
   } else {
